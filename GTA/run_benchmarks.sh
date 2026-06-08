@@ -1,7 +1,10 @@
 #!/bin/bash
 
 OUTPUT_FILE="results.json"
-NUM_RUNS=5
+if [ "$1" == "mini" ]; then
+    NUM_RUNS=1
+else
+    NUM_RUNS=5
 
 # Clear out previous runs
 if [ -f "$OUTPUT_FILE" ]; then
@@ -9,7 +12,11 @@ if [ -f "$OUTPUT_FILE" ]; then
     rm "$OUTPUT_FILE"
 fi
 
-LENGTHS=(512 1024 2048 4096)
+if [ "$1" == "mini" ]; then
+    LENGTHS=(512 4096)
+else
+    LENGTHS=(512 1024 2048 4096)
+fi
 EXPS=(1 2 3 4 5 6 7)
 
 echo "=========================================="
