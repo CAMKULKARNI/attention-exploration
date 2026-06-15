@@ -16,7 +16,7 @@ parser.add_argument("--exp_name", type=str, required=True)
 parser.add_argument("--attn_type", type=str, required=True)
 parser.add_argument("--num_layers", type=int, required=True)
 parser.add_argument("--prompt_len", type=int, required=True)
-parser.add_argument("--decode_tokens", type=int, default=100)
+parser.add_argument("--decode_tokens", type=int, default=512)
 parser.add_argument("--output_file", type=str, default="results.json")
 args = parser.parse_args()
 
@@ -46,10 +46,16 @@ def create_empty_caches(
                 (batch_size, num_kv_heads, max_len, depth), dtype=jnp.bfloat16
             )
             caches.append((k, v))
-        else:  # mha
+        elif attn_type in ("mha", "mha_rope"):
+            # Both MHA variants use full num_heads for K and V
             k = jnp.zeros((batch_size, num_heads, max_len, depth), dtype=jnp.bfloat16)
             v = jnp.zeros((batch_size, num_heads, max_len, depth), dtype=jnp.bfloat16)
             caches.append((k, v))
+        else:
+            raise ValueError(
+                f"Unknown attn_type '{attn_type}'. "
+                f"Expected one of: 'gta', 'gqa', 'mha', 'mha_rope'."
+            )
     return caches
 
 
@@ -77,14 +83,24 @@ def run_isolated_profile():
     variables = model.init(rng, dummy_input, use_causal_mask=False, current_pos=0)
 
     # -----------------------------------------------------------------
-    # FIX: RESTORE GLOBAL BFLOAT16 POLICY
-    # Cast all parameters to 16-bit to match the Keras footprint
+    # BFLOAT16 POLICY -- LAYERNORM-AWARE
+    # Cast all float32 parameters to bfloat16 EXCEPT LayerNorm scale/bias.
+    # nn.Dense already uses dtype/param_dtype=bfloat16 natively; this cast
+    # handles the embedding table and any remaining float32 residuals.
+    # LayerNorm is excluded because its variance accumulation is numerically
+    # sensitive: running scale/bias in bfloat16 causes precision degradation
+    # that does not affect matmuls but does affect normalisation quality.
     # -----------------------------------------------------------------
-    variables = jax.tree_util.tree_map(
-        lambda x: (
-            x.astype(jnp.bfloat16) if getattr(x, "dtype", None) == jnp.float32 else x
-        ),
-        variables,
+    def cast_to_bf16_except_layernorm(path, leaf):
+        is_layernorm = any("LayerNorm" in str(key) for key in path)
+        if is_layernorm:
+            return leaf  # Keep LayerNorm scale/bias in float32
+        if getattr(leaf, "dtype", None) == jnp.float32:
+            return leaf.astype(jnp.bfloat16)
+        return leaf
+
+    variables = jax.tree_util.tree_map_with_path(
+        cast_to_bf16_except_layernorm, variables
     )
 
     total_params = count_params(variables)
@@ -109,7 +125,12 @@ def run_isolated_profile():
     try:
         jax.clear_caches()
 
-        prompt_input = jnp.ones((1, args.prompt_len), dtype=jnp.int32)
+        rng_np = np.random.default_rng(42)
+        prompt_input = jnp.array(
+            rng_np.integers(
+                0, configuration.vocab_size, size=(1, args.prompt_len), dtype=np.int32
+            )
+        )
         active_caches = create_empty_caches(
             args.attn_type,
             1,
@@ -128,49 +149,87 @@ def run_isolated_profile():
         print("      Compiling XLA Graphs (This will take a moment, but only once!)...")
 
         # 1. Warm up Prefill Graph (Absorbs the ~18 second compile tax)
+        # Block on the FULL tuple, not just _logits. JAX dispatches GPU work
+        # asynchronously — the Python call returns immediately with handles to
+        # future results while the GPU computes in the background. Blocking only
+        # on _logits guarantees the logit tensor is ready, but the cache writes
+        # (dynamic_update_slice across every layer) may still be in-flight on
+        # the GPU. If they are still running when the timed prefill starts, two
+        # things go wrong: (1) the timed run contends with warmup's cache writes,
+        # inflating TTFT; (2) post_warmup_bytes is captured before all cache
+        # allocations have fully landed, deflating the VRAM baseline and
+        # inflating the incremental VRAM delta.
         _logits, _caches = prefill_step(variables, prompt_input, active_caches)
-        _logits.block_until_ready()
+        jax.block_until_ready((_logits, _caches))
 
         # 2. Warm up Decode Graph (Absorbs the ~3 second compile tax)
-        warmup_token = jnp.ones((1, 1), dtype=jnp.int32)
-        _logits, _ = decode_step(variables, warmup_token, args.prompt_len, _caches)
-        _logits.block_until_ready()
+        # Same reasoning: block on both outputs to ensure the GPU execution
+        # stream is fully drained before capturing the VRAM baseline below.
+        warmup_token = (
+            jnp.argmax(_logits[:, -1, :], axis=-1).astype(jnp.int32).reshape(1, 1)
+        )
+        _logits, _caches = decode_step(
+            variables, warmup_token, args.prompt_len, _caches
+        )
+        jax.block_until_ready((_logits, _caches))
+
+        # Capture VRAM baseline after warmup. All persistent buffers (JAX
+        # runtime, CUDA context, model weights, compiled KV caches) are now
+        # live. The delta against this baseline isolates the incremental cost
+        # of the profiled computation from constant process-level overhead.
+        post_warmup_bytes = jax.local_devices()[0].memory_stats().get("bytes_in_use", 0)
 
         # -----------------------------------------------------------------
         # ACTUAL PROFILING
         # -----------------------------------------------------------------
 
-        # TTFT (Prefill)
         start_time = time.perf_counter()
         logits, active_caches = prefill_step(variables, prompt_input, active_caches)
+        # Block on the KV cache, not the argmax result
+        jax.block_until_ready(active_caches)
+        ttft = time.perf_counter() - start_time
+
+        # Compute next_token outside of TTFT measurement
         next_token = (
             jnp.argmax(logits[:, -1, :], axis=-1).astype(jnp.int32).reshape(1, 1)
         )
-        next_token.block_until_ready()
-        ttft = time.perf_counter() - start_time
 
         # TPOT (Decode)
         decode_times = []
         for i in range(args.decode_tokens):
-            pos = jnp.array(args.prompt_len + i, dtype=jnp.int32)
+            pos = args.prompt_len + i
 
             start_step = time.perf_counter()
             logits, active_caches = decode_step(
                 variables, next_token, pos, active_caches
             )
+            jax.block_until_ready((logits, active_caches))
+            decode_times.append(time.perf_counter() - start_step)
             next_token = (
                 jnp.argmax(logits[:, -1, :], axis=-1).astype(jnp.int32).reshape(1, 1)
             )
-            next_token.block_until_ready()
-            decode_times.append(time.perf_counter() - start_step)
-
-        tpot = np.mean(decode_times)
 
         mem_stats = jax.local_devices()[0].memory_stats()
-        peak_vram_mb = mem_stats.get("peak_bytes_in_use", 0) / (1024**2)
+        # Incremental deltas: subtract the post-warmup baseline so that
+        # reported VRAM reflects only the profiled computation, not the
+        # JAX runtime, CUDA context, or model weight allocations.
+        peak_vram_mb = (mem_stats.get("peak_bytes_in_use", 0) - post_warmup_bytes) / (
+            1024**2
+        )
+        steady_vram_mb = (mem_stats.get("bytes_in_use", 0) - post_warmup_bytes) / (
+            1024**2
+        )
+
+        # Discard first 10 steps as secondary warmup ramp.
+        # tpot_mean is the publication number; tpot_std / tpot_p95 go in appendix.
+        warmup_steps = 10
+        stable_times = decode_times[warmup_steps:]
+        tpot_mean = float(np.mean(stable_times))
+        tpot_std = float(np.std(stable_times))
+        tpot_p95 = float(np.percentile(stable_times, 95))
 
         print(
-            f"      Params: {total_params / 1e6:.2f}M | VRAM: {peak_vram_mb:.2f} MB | TTFT: {ttft:.4f}s | TPOT: {tpot:.4f}s"
+            f"      Params: {total_params / 1e6:.2f}M | VRAM: {peak_vram_mb:.2f} MB | TTFT: {ttft:.4f}s | TPOT: {tpot_mean:.4f}s"
         )
 
         result_data = {
@@ -179,9 +238,16 @@ def run_isolated_profile():
             "layers": args.num_layers,
             "prompt_len": args.prompt_len,
             "params": total_params,
-            "vram": peak_vram_mb,
+            "vram_incremental_peak_mb": peak_vram_mb,
+            "vram_incremental_steady_mb": steady_vram_mb,
             "ttft": ttft,
-            "tpot": tpot,
+            # Primary number for tables: stable-window mean (first 10 steps discarded)
+            "tpot_mean": tpot_mean,
+            # For error bars / appendix figures
+            "tpot_std": tpot_std,
+            "tpot_p95": tpot_p95,
+            # Raw trace for reproducibility supplement
+            "tpot_all": [float(t) for t in decode_times],
         }
 
         if os.path.exists(args.output_file):
@@ -195,7 +261,23 @@ def run_isolated_profile():
             json.dump(data, f, indent=4)
 
     except RuntimeError as e:
-        print(f"      [!] OOM Crash or Runtime Error: {e}. Skipping JSON append.")
+        print(f"      [!] OOM Crash or Runtime Error: {e}. Writing failure record.")
+        failure_data = {
+            "exp_name": args.exp_name,
+            "attn_type": args.attn_type,
+            "layers": args.num_layers,
+            "prompt_len": args.prompt_len,
+            "status": "FAILED",
+            "error": str(e),
+        }
+        if os.path.exists(args.output_file):
+            with open(args.output_file, "r") as f:
+                data = json.load(f)
+        else:
+            data = []
+        data.append(failure_data)
+        with open(args.output_file, "w") as f:
+            json.dump(data, f, indent=4)
 
 
 if __name__ == "__main__":

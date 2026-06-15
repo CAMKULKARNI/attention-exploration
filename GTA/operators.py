@@ -63,20 +63,23 @@ class GroupTiedAttention(nn.Module):
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
 
-        wq = nn.Dense(self.latent_dim, use_bias=False)(x)
-        wa = nn.Dense(self.latent_dim, use_bias=False)(x)
+        wq = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wa = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
 
-        def split_heads(tensor):
-            return tensor.reshape(batch_size, -1, self.num_heads, depth).transpose(
-                0, 2, 1, 3
-            )
-
-        q = split_heads(wq)
-        new_a = split_heads(wa)
+        q = wq.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+        new_a = wa.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
 
         if cache is not None:
-            # FIX: Defensive casting to strictly satisfy JAX dynamic slicing
-            new_a = new_a.astype(cache.dtype)
             a_use = jax.lax.dynamic_update_slice(cache, new_a, (0, 0, start_pos, 0))
             new_cache = a_use
         else:
@@ -87,8 +90,11 @@ class GroupTiedAttention(nn.Module):
         a_t = a_use.transpose(0, 1, 3, 2)
 
         matmul_qa = jnp.matmul(q, a_t)
-        scaled_attention_logits = matmul_qa.astype(jnp.float32) / math.sqrt(depth)
+        inv_sqrt_depth = 1.0 / math.sqrt(depth)
+        scaled_attention_logits = matmul_qa.astype(jnp.float32) * inv_sqrt_depth
 
+        # num_heads is a compile-time module attribute; XLA constant-folds this
+        # across all decode steps, so no per-step allocation occurs at runtime.
         alibi_slopes = get_alibi_slopes(self.num_heads)
 
         q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
@@ -97,7 +103,7 @@ class GroupTiedAttention(nn.Module):
 
         distance = kv_range - q_idx
         slopes = alibi_slopes.reshape(1, self.num_heads, 1, 1)
-        scaled_attention_logits += slopes * distance
+        scaled_attention_logits += slopes * (-jnp.abs(distance))
 
         valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
         scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
@@ -113,7 +119,15 @@ class GroupTiedAttention(nn.Module):
         output = jnp.matmul(attention_weights, a_use).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
-        return nn.Dense(self.latent_dim, use_bias=False)(output), new_cache
+        return (
+            nn.Dense(
+                self.latent_dim,
+                use_bias=False,
+                dtype=jnp.bfloat16,
+                param_dtype=jnp.bfloat16,
+            )(output),
+            new_cache,
+        )
 
 
 class GroupedQueryAttention(nn.Module):
@@ -129,28 +143,47 @@ class GroupedQueryAttention(nn.Module):
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
 
-        wq = nn.Dense(self.latent_dim, use_bias=False)(x)
-        wk = nn.Dense(self.num_kv_heads * depth, use_bias=False)(x)
-        wv = nn.Dense(self.num_kv_heads * depth, use_bias=False)(x)
+        # -----------------------------------------------------------------
+        # OPTIMIZATION: STRICT NATIVE DTYPES
+        # Forces native 16-bit execution to avoid defensive casts later.
+        # -----------------------------------------------------------------
+        wq = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wk = nn.Dense(
+            self.num_kv_heads * depth,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wv = nn.Dense(
+            self.num_kv_heads * depth,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
 
-        freqs = jnp.arange(0, depth, 2, dtype=jnp.float32) / depth
-        inv_freq = 1.0 / (10000.0**freqs).reshape(1, -1)
+        inv_freq = (
+            1.0 / (10000.0 ** (jnp.arange(0, depth, 2, dtype=jnp.float32) / depth))
+        ).reshape(1, -1)
 
-        def split_heads(tensor, heads):
-            return tensor.reshape(batch_size, -1, heads, depth).transpose(0, 2, 1, 3)
-
-        q = split_heads(wq, self.num_heads)
-        new_k = split_heads(wk, self.num_kv_heads)
-        new_v = split_heads(wv, self.num_kv_heads)
+        q = wq.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+        new_k = wk.reshape(batch_size, -1, self.num_kv_heads, depth).transpose(
+            0, 2, 1, 3
+        )
+        new_v = wv.reshape(batch_size, -1, self.num_kv_heads, depth).transpose(
+            0, 2, 1, 3
+        )
 
         q = apply_rope(q, start_pos, inv_freq)
         new_k = apply_rope(new_k, start_pos, inv_freq)
 
         if cache is not None:
             k_cache, v_cache = cache
-            # FIX: Defensive casting
-            new_k = new_k.astype(k_cache.dtype)
-            new_v = new_v.astype(v_cache.dtype)
+            # Defensive casts removed; layers inherently match the cache dtype
             k_use = jax.lax.dynamic_update_slice(k_cache, new_k, (0, 0, start_pos, 0))
             v_use = jax.lax.dynamic_update_slice(v_cache, new_v, (0, 0, start_pos, 0))
             new_cache = (k_use, v_use)
@@ -160,14 +193,29 @@ class GroupedQueryAttention(nn.Module):
 
         kv_seq_len = k_use.shape[2]
 
-        q_reshaped = q.reshape(
-            batch_size, self.num_kv_heads, num_queries_per_kv, q_seq_len, depth
-        )
+        # Replace jnp.repeat with broadcast_to for true zero-copy expansion
+        k_use_exp = k_use.reshape(batch_size, self.num_kv_heads, 1, kv_seq_len, depth)
+        k_use_rep = jnp.broadcast_to(
+            k_use_exp,
+            (batch_size, self.num_kv_heads, num_queries_per_kv, kv_seq_len, depth),
+        ).reshape(batch_size, self.num_heads, kv_seq_len, depth)
 
-        matmul_qk = jnp.einsum("b h g q d, b h k d -> b h g q k", q_reshaped, k_use)
-        matmul_qk = matmul_qk.reshape(batch_size, self.num_heads, q_seq_len, kv_seq_len)
+        v_use_exp = v_use.reshape(batch_size, self.num_kv_heads, 1, kv_seq_len, depth)
+        v_use_rep = jnp.broadcast_to(
+            v_use_exp,
+            (batch_size, self.num_kv_heads, num_queries_per_kv, kv_seq_len, depth),
+        ).reshape(batch_size, self.num_heads, kv_seq_len, depth)
 
-        scaled_attention_logits = matmul_qk.astype(jnp.float32) / math.sqrt(depth)
+        k_t = k_use_rep.transpose(0, 1, 3, 2)
+
+        # Standard cuBLAS Matmul replaces the slow einsum
+        matmul_qk = jnp.matmul(q, k_t)
+
+        # -----------------------------------------------------------------
+        # OPTIMIZATION: ARITHMETIC INTENSITY
+        # -----------------------------------------------------------------
+        inv_sqrt_depth = 1.0 / math.sqrt(depth)
+        scaled_attention_logits = matmul_qk.astype(jnp.float32) * inv_sqrt_depth
 
         q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
         q_idx = q_idx.reshape(1, 1, -1, 1)
@@ -184,17 +232,19 @@ class GroupedQueryAttention(nn.Module):
             x.dtype
         )
 
-        attention_weights_reshaped = attention_weights.reshape(
-            batch_size, self.num_kv_heads, num_queries_per_kv, q_seq_len, kv_seq_len
-        )
+        # Standard cuBLAS Matmul replaces the output einsum
+        output = jnp.matmul(attention_weights, v_use_rep).transpose(0, 2, 1, 3)
+        output = output.reshape(batch_size, -1, self.latent_dim)
 
-        output = jnp.einsum(
-            "b h g q k, b h k d -> b h g q d", attention_weights_reshaped, v_use
+        return (
+            nn.Dense(
+                self.latent_dim,
+                use_bias=False,
+                dtype=jnp.bfloat16,
+                param_dtype=jnp.bfloat16,
+            )(output),
+            new_cache,
         )
-        output = output.reshape(batch_size, self.num_heads, q_seq_len, depth)
-        output = output.transpose(0, 2, 1, 3).reshape(batch_size, -1, self.latent_dim)
-
-        return nn.Dense(self.latent_dim, use_bias=False)(output), new_cache
 
 
 class MultiHeadAttention(nn.Module):
@@ -208,24 +258,31 @@ class MultiHeadAttention(nn.Module):
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
 
-        wq = nn.Dense(self.latent_dim, use_bias=False)(x)
-        wk = nn.Dense(self.latent_dim, use_bias=False)(x)
-        wv = nn.Dense(self.latent_dim, use_bias=False)(x)
+        wq = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wk = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wv = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
 
-        def split_heads(tensor):
-            return tensor.reshape(batch_size, -1, self.num_heads, depth).transpose(
-                0, 2, 1, 3
-            )
-
-        q = split_heads(wq)
-        new_k = split_heads(wk)
-        new_v = split_heads(wv)
+        q = wq.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+        new_k = wk.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+        new_v = wv.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
 
         if cache is not None:
             k_cache, v_cache = cache
-            # FIX: Defensive casting
-            new_k = new_k.astype(k_cache.dtype)
-            new_v = new_v.astype(v_cache.dtype)
             k_use = jax.lax.dynamic_update_slice(k_cache, new_k, (0, 0, start_pos, 0))
             v_use = jax.lax.dynamic_update_slice(v_cache, new_v, (0, 0, start_pos, 0))
             new_cache = (k_use, v_use)
@@ -237,7 +294,8 @@ class MultiHeadAttention(nn.Module):
         k_t = k_use.transpose(0, 1, 3, 2)
 
         matmul_qk = jnp.matmul(q, k_t)
-        scaled_attention_logits = matmul_qk.astype(jnp.float32) / math.sqrt(depth)
+        inv_sqrt_depth = 1.0 / math.sqrt(depth)
+        scaled_attention_logits = matmul_qk.astype(jnp.float32) * inv_sqrt_depth
 
         q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
         q_idx = q_idx.reshape(1, 1, -1, 1)
@@ -257,7 +315,103 @@ class MultiHeadAttention(nn.Module):
         output = jnp.matmul(attention_weights, v_use).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
-        return nn.Dense(self.latent_dim, use_bias=False)(output), new_cache
+        return (
+            nn.Dense(
+                self.latent_dim,
+                use_bias=False,
+                dtype=jnp.bfloat16,
+                param_dtype=jnp.bfloat16,
+            )(output),
+            new_cache,
+        )
+
+
+class MultiHeadAttentionRoPE(nn.Module):
+    latent_dim: int
+    num_heads: int
+    max_seq_len: int
+
+    @nn.compact
+    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+        depth = self.latent_dim // self.num_heads
+        batch_size = x.shape[0]
+        q_seq_len = x.shape[1]
+
+        wq = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wk = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+        wv = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(x)
+
+        # Identical RoPE construction to GQA — this is the symmetry requirement
+        inv_freq = (
+            1.0 / (10000.0 ** (jnp.arange(0, depth, 2, dtype=jnp.float32) / depth))
+        ).reshape(1, -1)
+
+        q = wq.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+        new_k = wk.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+        new_v = wv.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
+
+        # Apply RoPE — identical call signature to GQA
+        q = apply_rope(q, start_pos, inv_freq)
+        new_k = apply_rope(new_k, start_pos, inv_freq)
+
+        if cache is not None:
+            k_cache, v_cache = cache
+            k_use = jax.lax.dynamic_update_slice(k_cache, new_k, (0, 0, start_pos, 0))
+            v_use = jax.lax.dynamic_update_slice(v_cache, new_v, (0, 0, start_pos, 0))
+            new_cache = (k_use, v_use)
+        else:
+            k_use, v_use = new_k, new_v
+            new_cache = None
+
+        kv_seq_len = k_use.shape[2]
+        k_t = k_use.transpose(0, 1, 3, 2)
+        matmul_qk = jnp.matmul(q, k_t)
+        inv_sqrt_depth = 1.0 / math.sqrt(depth)
+        scaled_attention_logits = matmul_qk.astype(jnp.float32) * inv_sqrt_depth
+
+        # Identical masking logic to MHA — symmetric
+        q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
+        q_idx = q_idx.reshape(1, 1, -1, 1)
+        kv_range = jnp.arange(kv_seq_len, dtype=jnp.float32).reshape(1, 1, 1, -1)
+
+        valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
+        scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
+
+        if use_causal_mask:
+            causal_mask = (kv_range <= q_idx).astype(jnp.float32)
+            scaled_attention_logits += (1.0 - causal_mask) * -1e9
+
+        attention_weights = jax.nn.softmax(scaled_attention_logits, axis=-1).astype(
+            x.dtype
+        )
+
+        output = jnp.matmul(attention_weights, v_use).transpose(0, 2, 1, 3)
+        output = output.reshape(batch_size, -1, self.latent_dim)
+
+        return (
+            nn.Dense(
+                self.latent_dim,
+                use_bias=False,
+                dtype=jnp.bfloat16,
+                param_dtype=jnp.bfloat16,
+            )(output),
+            new_cache,
+        )
 
 
 class DecoderBlock(nn.Module):
@@ -283,13 +437,32 @@ class DecoderBlock(nn.Module):
             attn_out, new_cache = MultiHeadAttention(
                 self.latent_dim, self.num_heads, self.max_seq_len
             )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+        elif self.attn_type == "mha_rope":
+            attn_out, new_cache = MultiHeadAttentionRoPE(
+                self.latent_dim, self.num_heads, self.max_seq_len
+            )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+        else:
+            raise ValueError(
+                f"Unknown attn_type '{self.attn_type}'. "
+                f"Expected one of: 'gta', 'gqa', 'mha', 'mha_rope'."
+            )
 
         x = x + attn_out
 
         ffn_norm = nn.LayerNorm(epsilon=1e-6)(x)
-        ffn_out = nn.Dense(self.latent_dim * 4)(ffn_norm)
+        ffn_out = nn.Dense(
+            self.latent_dim * 4,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(ffn_norm)
         ffn_out = nn.gelu(ffn_out)
-        ffn_out = nn.Dense(self.latent_dim)(ffn_out)
+        ffn_out = nn.Dense(
+            self.latent_dim,
+            use_bias=False,
+            dtype=jnp.bfloat16,
+            param_dtype=jnp.bfloat16,
+        )(ffn_out)
 
         x = x + ffn_out
         return x, new_cache
@@ -337,6 +510,10 @@ class CausalLM(nn.Module):
             new_caches.append(layer_new_cache)
 
         x = nn.LayerNorm(epsilon=1e-6)(x)
-        logits = token_emb.attend(x)
+        # Cast to float32 at the model boundary. token_emb.attend(x) produces
+        # bfloat16 logits over a 50k-class vocabulary. Upcasting here costs
+        # one cheap elementwise op and ensures downstream consumers (argmax,
+        # softmax sampling, cross-entropy loss) operate with full precision.
+        logits = token_emb.attend(x).astype(jnp.float32)
 
         return logits, new_caches
