@@ -18,7 +18,7 @@ if [ "$1" == "mini" ]; then
 else
     LENGTHS=(512 1024 2048 4096)
 fi
-EXPS=(1 2 3 4 5 6 7 8 9 10 11)
+EXPS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14)
 
 echo "=========================================="
 echo "    STARTING FULLY RANDOMIZED BENCHMARK"
@@ -115,6 +115,29 @@ for RUN in $(seq 1 $NUM_RUNS); do
             11)
                 NAME="Exp 11: MHA + RoPE (30 Layers)"
                 ATTN="mha_rope"
+                LAYERS=30
+                ;;
+            # -----------------------------------------------------------
+            # Exp 12-14: GGTA (Grouped Tied Attention) sweep.
+            # GGTA = GTA with reduced A-head count (num_a_heads=4, matching
+            # GQA's num_kv_heads). Cache: [batch, 4, max_len, depth] —
+            # 4x smaller than GTA, smaller than GQA's paired (K,V).
+            # Mirrors the GTA and GQA layer sweeps (24 / 28 / 30 layers).
+            # Key question: does GTA's TPOT advantage survive head reduction?
+            # -----------------------------------------------------------
+            12)
+                NAME="Exp 12: GGTA + ALiBi (24 Layers)"
+                ATTN="ggta"
+                LAYERS=24
+                ;;
+            13)
+                NAME="Exp 13: GGTA + ALiBi (28 Layers)"
+                ATTN="ggta"
+                LAYERS=28
+                ;;
+            14)
+                NAME="Exp 14: GGTA + ALiBi (30 Layers)"
+                ATTN="ggta"
                 LAYERS=30
                 ;;
             *)
