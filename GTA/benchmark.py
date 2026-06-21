@@ -29,16 +29,16 @@ def count_params(params):
     return sum(x.size for x in jax.tree_util.tree_leaves(params))
 
 
-# Cache initialization handles GTA's single tensor vs MHA/GQA's paired tensors
+# Cache initialization handles TA's single tensor vs MHA/GQA's paired tensors
 def create_empty_caches(
     attn_type, batch_size, num_heads, num_kv_heads, max_len, depth, num_layers
 ):
     caches = []
     for _ in range(num_layers):
-        if attn_type == "gta":
+        if attn_type == "ta":
             a = jnp.zeros((batch_size, num_heads, max_len, depth), dtype=jnp.bfloat16)
             caches.append(a)
-        elif attn_type == "ggta":
+        elif attn_type == "gta":
             a = jnp.zeros(
                 (batch_size, num_kv_heads, max_len, depth), dtype=jnp.bfloat16
             )
@@ -59,7 +59,7 @@ def create_empty_caches(
         else:
             raise ValueError(
                 f"Unknown attn_type '{attn_type}'. "
-                f"Expected one of: 'gta', 'ggta', 'gqa', 'mha', 'mha_rope'."
+                f"Expected one of: 'ta', 'gta', 'gqa', 'mha', 'mha_rope'."
             )
     return caches
 

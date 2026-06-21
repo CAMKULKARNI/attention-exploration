@@ -20,15 +20,15 @@ df = pd.DataFrame(data)
 target_exps = [
     "Exp 1: Vanilla MHA (24 Layers)",
     "Exp 2: GQA + RoPE (24 Layers)",
-    "Exp 3: GTA + ALiBi (24 Layers)",
-    "Exp 12: GGTA + ALiBi (24 Layers)",
+    "Exp 3: TA + ALiBi (24 Layers)",
+    "Exp 12: GTA + ALiBi (24 Layers)",
     "Exp 9: MHA + RoPE (24 Layers)",
 ]
 short_labels = [
     "Vanilla MHA",
     "GQA + RoPE",
+    "TA + ALiBi",
     "GTA + ALiBi",
-    "GGTA + ALiBi",
     "MHA + RoPE",
 ]
 

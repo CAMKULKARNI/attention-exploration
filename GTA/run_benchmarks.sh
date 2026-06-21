@@ -58,8 +58,8 @@ for RUN in $(seq 1 $NUM_RUNS); do
                 LAYERS=24 
                 ;;
             3) 
-                NAME="Exp 3: GTA + ALiBi (24 Layers)"
-                ATTN="gta"
+                NAME="Exp 3: TA + ALiBi (24 Layers)"
+                ATTN="ta"
                 LAYERS=24 
                 ;;
             4) 
@@ -73,13 +73,13 @@ for RUN in $(seq 1 $NUM_RUNS); do
                 LAYERS=30 
                 ;;
             6) 
-                NAME="Exp 6: GTA + ALiBi (28 Layers)"
-                ATTN="gta"
+                NAME="Exp 6: TA + ALiBi (28 Layers)"
+                ATTN="ta"
                 LAYERS=28 
                 ;;
             7) 
-                NAME="Exp 7: GTA + ALiBi (30 Layers)"
-                ATTN="gta"
+                NAME="Exp 7: TA + ALiBi (30 Layers)"
+                ATTN="ta"
                 LAYERS=30 
                 ;;
             # -----------------------------------------------------------
@@ -96,7 +96,7 @@ for RUN in $(seq 1 $NUM_RUNS); do
                 ;;
             # -----------------------------------------------------------
             # Exp 9-11: MHA + RoPE sweep (24 / 28 / 30 layers).
-            # Mirrors the GQA and GTA layer sweeps (Exp 2-7).
+            # Mirrors the GQA and TA layer sweeps (Exp 2-7).
             # Iso-layer vs Exp 1 (MHA + Learned PE) isolates the cost of
             # swapping positional encoding within full MHA.
             # Iso-layer vs Exp 2 (GQA + RoPE) isolates the cost of head
@@ -118,26 +118,26 @@ for RUN in $(seq 1 $NUM_RUNS); do
                 LAYERS=30
                 ;;
             # -----------------------------------------------------------
-            # Exp 12-14: GGTA (Grouped Tied Attention) sweep.
-            # GGTA = GTA with reduced A-head count (num_a_heads=4, matching
+            # Exp 12-14: GTA (reduced-head tied attention) sweep.
+            # GTA = TA with reduced A-head count (num_a_heads=4, matching
             # GQA's num_kv_heads). Cache: [batch, 4, max_len, depth] —
-            # 4x smaller than GTA, smaller than GQA's paired (K,V).
-            # Mirrors the GTA and GQA layer sweeps (24 / 28 / 30 layers).
-            # Key question: does GTA's TPOT advantage survive head reduction?
+            # 4x smaller than TA, smaller than GQA's paired (K,V).
+            # Mirrors the TA and GQA layer sweeps (24 / 28 / 30 layers).
+            # Key question: does TA's TPOT advantage survive head reduction?
             # -----------------------------------------------------------
             12)
-                NAME="Exp 12: GGTA + ALiBi (24 Layers)"
-                ATTN="ggta"
+                NAME="Exp 12: GTA + ALiBi (24 Layers)"
+                ATTN="gta"
                 LAYERS=24
                 ;;
             13)
-                NAME="Exp 13: GGTA + ALiBi (28 Layers)"
-                ATTN="ggta"
+                NAME="Exp 13: GTA + ALiBi (28 Layers)"
+                ATTN="gta"
                 LAYERS=28
                 ;;
             14)
-                NAME="Exp 14: GGTA + ALiBi (30 Layers)"
-                ATTN="ggta"
+                NAME="Exp 14: GTA + ALiBi (30 Layers)"
+                ATTN="gta"
                 LAYERS=30
                 ;;
             *)

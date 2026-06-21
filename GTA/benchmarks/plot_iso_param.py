@@ -24,14 +24,14 @@ iso_exps = [
     "Exp 1: Vanilla MHA (24 Layers)",
     "Exp 9: MHA + RoPE (24 Layers)",
     "Exp 4: GQA + RoPE (28 Layers)",
-    "Exp 13: GGTA + ALiBi (28 Layers)",
+    "Exp 13: GTA + ALiBi (28 Layers)",
 ]
 
 short_labels = [
     "Vanilla MHA\n24 Layers",
     "MHA + RoPE\n24 Layers",
     "GQA + RoPE\n28 Layers",
-    "GGTA + ALiBi\n28 Layers",
+    "GTA + ALiBi\n28 Layers",
 ]
 
 df_iso = df[df["exp_name"].isin(iso_exps)].copy()

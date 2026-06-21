@@ -52,7 +52,7 @@ def apply_rope(x, start_pos, inv_freq):
     return rotated_out.astype(x.dtype)
 
 
-class GroupTiedAttention(nn.Module):
+class TiedAttention(nn.Module):
     latent_dim: int
     num_heads: int
     max_seq_len: int
@@ -130,18 +130,18 @@ class GroupTiedAttention(nn.Module):
         )
 
 
-class GroupTiedAttentionGrouped(nn.Module):
-    """Grouped Tied Attention (GGTA).
+class GroupTiedAttention(nn.Module):
+    """Group Tied Attention (GTA).
 
-    Extends GroupTiedAttention by reducing the A-tensor head count from
+    Extends TiedAttention by reducing the A-tensor head count from
     num_heads down to num_a_heads (analogous to num_kv_heads in GQA).
     This produces a KV cache of shape [batch, num_a_heads, max_len, depth],
     which is 4x smaller than standard GTA and smaller than GQA's paired
     (K, V) cache at the same head count.
 
     Design space position:
-        Full-heads tied  → GroupTiedAttention          (GTA)
-        Reduced-heads tied → GroupTiedAttentionGrouped (GGTA)   ← this class
+        Full-heads tied  → TiedAttention          (TA)
+        Reduced-heads tied → GroupTiedAttention (GTA)   ← this class
         Reduced-heads separate KV → GroupedQueryAttention (GQA)
 
     The Q projection uses num_heads (full query heads) throughout.
@@ -230,7 +230,7 @@ class GroupTiedAttentionGrouped(nn.Module):
             x.dtype
         )
 
-        # Output matmul uses the expanded a_use_rep — symmetric with GTA
+        # Output matmul uses the expanded a_use_rep — symmetric with TA
         output = jnp.matmul(attention_weights, a_use_rep).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
@@ -540,12 +540,12 @@ class DecoderBlock(nn.Module):
     def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
         x_norm = nn.LayerNorm(epsilon=1e-6)(x)
 
-        if self.attn_type == "gta":
-            attn_out, new_cache = GroupTiedAttention(
+        if self.attn_type == "ta":
+            attn_out, new_cache = TiedAttention(
                 self.latent_dim, self.num_heads, self.max_seq_len
             )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
-        elif self.attn_type == "ggta":
-            attn_out, new_cache = GroupTiedAttentionGrouped(
+        elif self.attn_type == "gta":
+            attn_out, new_cache = GroupTiedAttention(
                 self.latent_dim, self.num_heads, self.num_kv_heads, self.max_seq_len
             )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
         elif self.attn_type == "gqa":
@@ -563,7 +563,7 @@ class DecoderBlock(nn.Module):
         else:
             raise ValueError(
                 f"Unknown attn_type '{self.attn_type}'. "
-                f"Expected one of: 'gta', 'ggta', 'gqa', 'mha', 'mha_rope'."
+                f"Expected one of: 'ta', 'gta', 'gqa', 'mha', 'mha_rope'."
             )
 
         x = x + attn_out

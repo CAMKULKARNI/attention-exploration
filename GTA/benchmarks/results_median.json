@@ -80,7 +80,7 @@
         "tpot":0.0081538944
     },
     {
-        "exp_name":"Exp 3: GTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 3: TA + ALiBi (24 Layers)",
         "attn_type":"gta",
         "layers":24,
         "prompt_len":512,
@@ -90,7 +90,7 @@
         "tpot":0.0060418627
     },
     {
-        "exp_name":"Exp 3: GTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 3: TA + ALiBi (24 Layers)",
         "attn_type":"gta",
         "layers":24,
         "prompt_len":1024,
@@ -100,7 +100,7 @@
         "tpot":0.0061662454
     },
     {
-        "exp_name":"Exp 3: GTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 3: TA + ALiBi (24 Layers)",
         "attn_type":"gta",
         "layers":24,
         "prompt_len":2048,
@@ -110,7 +110,7 @@
         "tpot":0.0069822439
     },
     {
-        "exp_name":"Exp 3: GTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 3: TA + ALiBi (24 Layers)",
         "attn_type":"gta",
         "layers":24,
         "prompt_len":4096,
@@ -200,7 +200,7 @@
         "tpot":0.0097948327
     },
     {
-        "exp_name":"Exp 6: GTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 6: TA + ALiBi (28 Layers)",
         "attn_type":"gta",
         "layers":28,
         "prompt_len":512,
@@ -210,7 +210,7 @@
         "tpot":0.0062783375
     },
     {
-        "exp_name":"Exp 6: GTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 6: TA + ALiBi (28 Layers)",
         "attn_type":"gta",
         "layers":28,
         "prompt_len":1024,
@@ -220,7 +220,7 @@
         "tpot":0.0063720236
     },
     {
-        "exp_name":"Exp 6: GTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 6: TA + ALiBi (28 Layers)",
         "attn_type":"gta",
         "layers":28,
         "prompt_len":2048,
@@ -230,7 +230,7 @@
         "tpot":0.0074524419
     },
     {
-        "exp_name":"Exp 6: GTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 6: TA + ALiBi (28 Layers)",
         "attn_type":"gta",
         "layers":28,
         "prompt_len":4096,
@@ -240,7 +240,7 @@
         "tpot":0.0095055846
     },
     {
-        "exp_name":"Exp 7: GTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 7: TA + ALiBi (30 Layers)",
         "attn_type":"gta",
         "layers":30,
         "prompt_len":512,
@@ -250,7 +250,7 @@
         "tpot":0.0063537468
     },
     {
-        "exp_name":"Exp 7: GTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 7: TA + ALiBi (30 Layers)",
         "attn_type":"gta",
         "layers":30,
         "prompt_len":1024,
@@ -260,7 +260,7 @@
         "tpot":0.008135495
     },
     {
-        "exp_name":"Exp 7: GTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 7: TA + ALiBi (30 Layers)",
         "attn_type":"gta",
         "layers":30,
         "prompt_len":2048,
@@ -270,7 +270,7 @@
         "tpot":0.0079002962
     },
     {
-        "exp_name":"Exp 7: GTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 7: TA + ALiBi (30 Layers)",
         "attn_type":"gta",
         "layers":30,
         "prompt_len":4096,
@@ -440,7 +440,7 @@
         "tpot":0.0113819489
     },
     {
-        "exp_name":"Exp 12: GGTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 12: GTA + ALiBi (24 Layers)",
         "attn_type":"ggta",
         "layers":24,
         "prompt_len":512,
@@ -450,7 +450,7 @@
         "tpot":0.0059243937
     },
     {
-        "exp_name":"Exp 12: GGTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 12: GTA + ALiBi (24 Layers)",
         "attn_type":"ggta",
         "layers":24,
         "prompt_len":1024,
@@ -460,7 +460,7 @@
         "tpot":0.005928403
     },
     {
-        "exp_name":"Exp 12: GGTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 12: GTA + ALiBi (24 Layers)",
         "attn_type":"ggta",
         "layers":24,
         "prompt_len":2048,
@@ -470,7 +470,7 @@
         "tpot":0.0059570232
     },
     {
-        "exp_name":"Exp 12: GGTA + ALiBi (24 Layers)",
+        "exp_name":"Exp 12: GTA + ALiBi (24 Layers)",
         "attn_type":"ggta",
         "layers":24,
         "prompt_len":4096,
@@ -480,7 +480,7 @@
         "tpot":0.0067274688
     },
     {
-        "exp_name":"Exp 13: GGTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 13: GTA + ALiBi (28 Layers)",
         "attn_type":"ggta",
         "layers":28,
         "prompt_len":512,
@@ -490,7 +490,7 @@
         "tpot":0.0062419122
     },
     {
-        "exp_name":"Exp 13: GGTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 13: GTA + ALiBi (28 Layers)",
         "attn_type":"ggta",
         "layers":28,
         "prompt_len":1024,
@@ -500,7 +500,7 @@
         "tpot":0.0064359885
     },
     {
-        "exp_name":"Exp 13: GGTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 13: GTA + ALiBi (28 Layers)",
         "attn_type":"ggta",
         "layers":28,
         "prompt_len":2048,
@@ -510,7 +510,7 @@
         "tpot":0.0067645641
     },
     {
-        "exp_name":"Exp 13: GGTA + ALiBi (28 Layers)",
+        "exp_name":"Exp 13: GTA + ALiBi (28 Layers)",
         "attn_type":"ggta",
         "layers":28,
         "prompt_len":4096,
@@ -520,7 +520,7 @@
         "tpot":0.0071699291
     },
     {
-        "exp_name":"Exp 14: GGTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 14: GTA + ALiBi (30 Layers)",
         "attn_type":"ggta",
         "layers":30,
         "prompt_len":512,
@@ -530,7 +530,7 @@
         "tpot":0.0067588058
     },
     {
-        "exp_name":"Exp 14: GGTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 14: GTA + ALiBi (30 Layers)",
         "attn_type":"ggta",
         "layers":30,
         "prompt_len":1024,
@@ -540,7 +540,7 @@
         "tpot":0.0075020311
     },
     {
-        "exp_name":"Exp 14: GGTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 14: GTA + ALiBi (30 Layers)",
         "attn_type":"ggta",
         "layers":30,
         "prompt_len":2048,
@@ -550,7 +550,7 @@
         "tpot":0.0078592854
     },
     {
-        "exp_name":"Exp 14: GGTA + ALiBi (30 Layers)",
+        "exp_name":"Exp 14: GTA + ALiBi (30 Layers)",
         "attn_type":"ggta",
         "layers":30,
         "prompt_len":4096,

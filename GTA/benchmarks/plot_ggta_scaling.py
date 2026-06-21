@@ -23,7 +23,7 @@ target_exps = [
     "Exp 11: MHA + RoPE (30 Layers)",
     "Exp 2: GQA + RoPE (24 Layers)",
     "Exp 5: GQA + RoPE (30 Layers)",
-    "Exp 14: GGTA + ALiBi (30 Layers)",
+    "Exp 14: GTA + ALiBi (30 Layers)",
 ]
 
 short_labels = [
@@ -31,7 +31,7 @@ short_labels = [
     "MHA + RoPE\n(30 Layers)",
     "GQA + RoPE\n(24 Layers)",
     "GQA + RoPE\n(30 Layers)",
-    "GGTA + ALiBi\n(30 Layers)",
+    "GTA + ALiBi\n(30 Layers)",
 ]
 
 df_filtered = df[df["exp_name"].isin(target_exps)].copy()
@@ -110,7 +110,7 @@ for ax, (col, ylabel, color, fmt) in zip(axes, metrics):
 axes[-1].set_xticks(x)
 axes[-1].set_xticklabels(final_labels)
 axes[0].set_title(
-    "The Depth Narrative: GGTA 30L vs 24L and 30L Baselines",
+    "The Depth Narrative: GTA 30L vs 24L and 30L Baselines",
     fontweight="bold",
     fontsize=14,
     pad=15,
@@ -118,4 +118,4 @@ axes[0].set_title(
 
 plt.tight_layout()
 plt.savefig("ggta_scaling_plot.png", dpi=300)
-print("✅ GGTA Scaling plot saved to ggta_scaling_plot.png")
+print("✅ GTA Scaling plot saved to ggta_scaling_plot.png")
