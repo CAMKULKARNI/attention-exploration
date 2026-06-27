@@ -58,7 +58,9 @@ class TiedAttention(nn.Module):
     max_seq_len: int
 
     @nn.compact
-    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+    def __call__(
+        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
+    ):
         depth = self.latent_dim // self.num_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
@@ -116,6 +118,10 @@ class TiedAttention(nn.Module):
             x.dtype
         )
 
+        attention_weights = nn.Dropout(rate=0.1)(
+            attention_weights, deterministic=deterministic
+        )
+
         output = jnp.matmul(attention_weights, a_use).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
@@ -158,7 +164,9 @@ class GroupTiedAttention(nn.Module):
     max_seq_len: int
 
     @nn.compact
-    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+    def __call__(
+        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
+    ):
         depth = self.latent_dim // self.num_heads
         num_queries_per_a = self.num_heads // self.num_a_heads
         batch_size = x.shape[0]
@@ -230,6 +238,10 @@ class GroupTiedAttention(nn.Module):
             x.dtype
         )
 
+        attention_weights = nn.Dropout(rate=0.1)(
+            attention_weights, deterministic=deterministic
+        )
+
         # Output matmul uses the expanded a_use_rep — symmetric with TA
         output = jnp.matmul(attention_weights, a_use_rep).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
@@ -252,7 +264,9 @@ class GroupedQueryAttention(nn.Module):
     max_seq_len: int
 
     @nn.compact
-    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+    def __call__(
+        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
+    ):
         depth = self.latent_dim // self.num_heads
         num_queries_per_kv = self.num_heads // self.num_kv_heads
         batch_size = x.shape[0]
@@ -347,6 +361,10 @@ class GroupedQueryAttention(nn.Module):
             x.dtype
         )
 
+        attention_weights = nn.Dropout(rate=0.1)(
+            attention_weights, deterministic=deterministic
+        )
+
         # Standard cuBLAS Matmul replaces the output einsum
         output = jnp.matmul(attention_weights, v_use_rep).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
@@ -368,7 +386,9 @@ class MultiHeadAttention(nn.Module):
     max_seq_len: int
 
     @nn.compact
-    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+    def __call__(
+        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
+    ):
         depth = self.latent_dim // self.num_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
@@ -427,6 +447,10 @@ class MultiHeadAttention(nn.Module):
             x.dtype
         )
 
+        attention_weights = nn.Dropout(rate=0.1)(
+            attention_weights, deterministic=deterministic
+        )
+
         output = jnp.matmul(attention_weights, v_use).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
@@ -447,7 +471,9 @@ class MultiHeadAttentionRoPE(nn.Module):
     max_seq_len: int
 
     @nn.compact
-    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+    def __call__(
+        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
+    ):
         depth = self.latent_dim // self.num_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
@@ -515,6 +541,9 @@ class MultiHeadAttentionRoPE(nn.Module):
             x.dtype
         )
 
+        attention_weights = nn.Dropout(rate=0.1)(
+            attention_weights, deterministic=deterministic
+        )
         output = jnp.matmul(attention_weights, v_use).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
@@ -537,29 +566,61 @@ class DecoderBlock(nn.Module):
     num_kv_heads: int = 4
 
     @nn.compact
-    def __call__(self, x, use_causal_mask=False, start_pos=0, cache=None):
+    def __call__(
+        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
+    ):
         x_norm = nn.LayerNorm(epsilon=1e-6)(x)
 
         if self.attn_type == "ta":
             attn_out, new_cache = TiedAttention(
                 self.latent_dim, self.num_heads, self.max_seq_len
-            )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+            )(
+                x_norm,
+                use_causal_mask=use_causal_mask,
+                start_pos=start_pos,
+                cache=cache,
+                deterministic=deterministic,
+            )
         elif self.attn_type == "gta":
             attn_out, new_cache = GroupTiedAttention(
                 self.latent_dim, self.num_heads, self.num_kv_heads, self.max_seq_len
-            )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+            )(
+                x_norm,
+                use_causal_mask=use_causal_mask,
+                start_pos=start_pos,
+                cache=cache,
+                deterministic=deterministic,
+            )
         elif self.attn_type == "gqa":
             attn_out, new_cache = GroupedQueryAttention(
                 self.latent_dim, self.num_heads, self.num_kv_heads, self.max_seq_len
-            )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+            )(
+                x_norm,
+                use_causal_mask=use_causal_mask,
+                start_pos=start_pos,
+                cache=cache,
+                deterministic=deterministic,
+            )
         elif self.attn_type == "mha":
             attn_out, new_cache = MultiHeadAttention(
                 self.latent_dim, self.num_heads, self.max_seq_len
-            )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+            )(
+                x_norm,
+                use_causal_mask=use_causal_mask,
+                start_pos=start_pos,
+                cache=cache,
+                deterministic=deterministic,
+            )
         elif self.attn_type == "mha_rope":
             attn_out, new_cache = MultiHeadAttentionRoPE(
                 self.latent_dim, self.num_heads, self.max_seq_len
-            )(x_norm, use_causal_mask=use_causal_mask, start_pos=start_pos, cache=cache)
+            )(
+                x_norm,
+                use_causal_mask=use_causal_mask,
+                start_pos=start_pos,
+                cache=cache,
+                deterministic=deterministic,
+            )
         else:
             raise ValueError(
                 f"Unknown attn_type '{self.attn_type}'. "
@@ -569,13 +630,18 @@ class DecoderBlock(nn.Module):
         x = x + attn_out
 
         ffn_norm = nn.LayerNorm(epsilon=1e-6)(x)
+
         ffn_out = nn.Dense(
             self.latent_dim * 4,
             use_bias=False,
             dtype=jnp.bfloat16,
             param_dtype=jnp.bfloat16,
         )(ffn_norm)
+
         ffn_out = nn.gelu(ffn_out)
+
+        ffn_out = nn.Dropout(rate=0.1)(ffn_out, deterministic=deterministic)
+
         ffn_out = nn.Dense(
             self.latent_dim,
             use_bias=False,
@@ -584,6 +650,7 @@ class DecoderBlock(nn.Module):
         )(ffn_out)
 
         x = x + ffn_out
+
         return x, new_cache
 
 
@@ -597,7 +664,7 @@ class CausalLM(nn.Module):
     num_kv_heads: int = 4
 
     @nn.compact
-    def __call__(self, inputs, use_causal_mask=False, current_pos=0, caches=None):
+    def __call__(self, inputs, use_causal_mask=False, current_pos=0, caches=None, deterministic=True):
         seq_len = inputs.shape[-1]
 
         token_emb = nn.Embed(num_embeddings=self.vocab_size, features=self.latent_dim)
@@ -625,6 +692,7 @@ class CausalLM(nn.Module):
                 use_causal_mask=use_causal_mask,
                 start_pos=current_pos,
                 cache=layer_cache,
+                deterministic=deterministic,
             )
             new_caches.append(layer_new_cache)
 

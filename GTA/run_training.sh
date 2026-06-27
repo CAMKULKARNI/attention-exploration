@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Configuration
-MAX_STEPS=10000
 SEQ_LEN=512
 MICRO_BATCH=2        # Tune this depending on your 8GB VRAM limit
 GRAD_ACCUM=16        # Effective batch size = MICRO_BATCH * GRAD_ACCUM (2 * 16 = 32)
@@ -35,11 +34,11 @@ for EXP_ID in "${EXPS[@]}"; do
     esac
     
     echo "--> Initiating $NAME"
+    # --max_steps is completely removed here, deferring to train.py's internal calculation
     python train.py \
         --exp_name "$NAME" \
         --attn_type "$ATTN" \
         --num_layers $LAYERS \
-        --max_steps $MAX_STEPS \
         --seq_len $SEQ_LEN \
         --micro_batch_size $MICRO_BATCH \
         --grad_accum_steps $GRAD_ACCUM \
