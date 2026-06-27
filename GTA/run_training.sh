@@ -34,7 +34,7 @@ for EXP_ID in "${EXPS[@]}"; do
     esac
     
     echo "--> Initiating $NAME"
-    # --max_steps is completely removed here, deferring to train.py's internal calculation
+    # max_steps is automatically computed in train.py ensuring exactly 1 Epoch
     python train.py \
         --exp_name "$NAME" \
         --attn_type "$ATTN" \
