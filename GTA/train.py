@@ -5,8 +5,10 @@ import json
 import time
 import math
 import numpy as np
+from tqdm import tqdm
 
 os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
+os.environ["XLA_PYTHON_CLIENT_ALLOCATOR"] = "platform"
 
 import jax
 import jax.numpy as jnp
@@ -68,11 +70,11 @@ def create_train_state(rng, model, args, max_opt_steps):
         end_value=args.learning_rate * 0.1,
     )
 
+    # REMOVED optax.MultiSteps to save VRAM and fix the XLA I/O limit.
     optimizer = optax.chain(
         optax.clip_by_global_norm(1.0),
         optax.adamw(learning_rate=schedule, weight_decay=0.1),
     )
-    optimizer = optax.MultiSteps(optimizer, every_k_schedule=args.grad_accum_steps)
 
     return ResumableTrainState.create(
         apply_fn=model.apply,
@@ -83,40 +85,68 @@ def create_train_state(rng, model, args, max_opt_steps):
 
 
 @jax.jit
-def train_step(state, batch, dropout_rng):
-    inputs = batch[:, :-1]
-    targets = batch[:, 1:]
+def train_step(state, macro_batch, dropout_rng):
+    """
+    Executes a full macro-batch using jax.lax.scan to accumulate gradients
+    strictly within the compiled XLA graph, bypassing I/O memory limits.
+    """
 
-    def loss_fn(params):
-        logits, _ = state.apply_fn(
-            {"params": params},
-            inputs,
-            use_causal_mask=True,
-            current_pos=0,
-            caches=None,
-            deterministic=False,
-            rngs={"dropout": dropout_rng},
+    def body_fn(carry, micro_batch):
+        rng, accum_loss, accum_grads = carry
+        rng, step_rng = jax.random.split(rng)
+
+        inputs = micro_batch[:, :-1]
+        targets = micro_batch[:, 1:]
+
+        def loss_fn(params):
+            logits, _ = state.apply_fn(
+                {"params": params},
+                inputs,
+                use_causal_mask=True,
+                current_pos=0,
+                caches=None,
+                deterministic=False,
+                rngs={"dropout": step_rng},
+            )
+            loss = optax.softmax_cross_entropy_with_integer_labels(
+                logits=logits, labels=targets
+            )
+            return jnp.mean(loss)
+
+        loss, grads = jax.value_and_grad(loss_fn)(state.params)
+
+        # Accumulate loss and gradients in float32 to prevent bfloat16 underflow
+        accum_loss = accum_loss + loss
+        accum_grads = jax.tree_util.tree_map(
+            lambda a, b: a + b.astype(jnp.float32), accum_grads, grads
         )
-        loss = optax.softmax_cross_entropy_with_integer_labels(
-            logits=logits, labels=targets
-        )
-        return jnp.mean(loss)
 
-    grad_fn = jax.value_and_grad(loss_fn)
-    loss, grads = grad_fn(state.params)
+        return (rng, accum_loss, accum_grads), None
 
-    state = state.apply_gradients(grads=grads)
+    # Initialize accumulators
+    init_loss = jnp.array(0.0)
+    init_grads = jax.tree_util.tree_map(
+        lambda x: jnp.zeros(x.shape, dtype=jnp.float32), state.params
+    )
+    init_carry = (dropout_rng, init_loss, init_grads)
 
-    # Grad norm computed on the per-micro-batch gradient for observability.
-    # Note: this reports the variance of individual micro-batch gradients,
-    # not the accumulated gradient that AdamW actually applies once every
-    # grad_accum_steps calls -- expect this to look noisier than a true
-    # per-optimizer-step norm, by design.
+    # jax.lax.scan loops over the 1st dimension of macro_batch (grad_accum_steps)
+    final_carry, _ = jax.lax.scan(body_fn, init_carry, macro_batch)
+    _, total_loss, total_grads = final_carry
+
+    # Calculate exact averages
+    num_micro_batches = macro_batch.shape[0]
+    avg_loss = total_loss / num_micro_batches
+    avg_grads = jax.tree_util.tree_map(lambda x: x / num_micro_batches, total_grads)
+
+    # Apply the perfectly averaged macro-gradient
+    state = state.apply_gradients(grads=avg_grads)
+
     grad_norm = jnp.sqrt(
-        sum([jnp.sum(jnp.square(x)) for x in jax.tree_util.tree_leaves(grads)])
+        sum([jnp.sum(jnp.square(x)) for x in jax.tree_util.tree_leaves(avg_grads)])
     )
 
-    return state, loss, grad_norm
+    return state, avg_loss, grad_norm
 
 
 @jax.jit
@@ -143,16 +173,16 @@ def run_validation(state, val_data_map, args):
     num_batches = len(val_data_map) // tokens_per_batch
     total_val_loss = 0.0
 
-    for i in range(num_batches):
+    pbar = tqdm(range(num_batches), desc="      🔬 Validating", leave=False)
+    for i in pbar:
         start_idx = i * tokens_per_batch
         end_idx = start_idx + tokens_per_batch
         raw_batch = val_data_map[start_idx:end_idx].astype(np.int32)
         batch = jnp.array(raw_batch.reshape(args.micro_batch_size, args.seq_len + 1))
 
-        # -----------------------------------------------------------------
-        # MEMORY LEAK FIX (Validation)
-        # -----------------------------------------------------------------
-        total_val_loss += float(eval_step(state, batch))
+        loss_val = float(eval_step(state, batch))
+        total_val_loss += loss_val
+        pbar.set_postfix({"Loss": f"{loss_val:.4f}"})
 
     avg_val_loss = total_val_loss / num_batches
     val_ppl = math.exp(avg_val_loss) if avg_val_loss < 20 else float("inf")
@@ -171,26 +201,16 @@ def main():
     train_data_map = np.memmap(args.train_data_file, dtype=np.uint16, mode="r")
     val_data_map = np.memmap(args.val_data_file, dtype=np.uint16, mode="r")
 
-    tokens_per_micro_batch = args.micro_batch_size * (args.seq_len + 1)
-
-    total_train_tokens = len(train_data_map)
-    max_micro_steps = total_train_tokens // tokens_per_micro_batch
-    max_opt_steps = max_micro_steps // args.grad_accum_steps
-
-    print(f"\n      📊 Train Dataset: {total_train_tokens:,} tokens")
-    print(
-        f"      🎯 1 Epoch requires: {max_opt_steps} optimizer steps ({max_micro_steps} micro-batches)."
+    # Tokens required for one full optimizer step (Macro-Batch)
+    tokens_per_macro_batch = (
+        args.grad_accum_steps * args.micro_batch_size * (args.seq_len + 1)
     )
 
-    # -----------------------------------------------------------------
-    # METHODOLOGY NOTE (Causal Transitions)
-    # The dataloader dynamically slices 1D arrays into 2D chunks of shape
-    # (batch_size, seq_len + 1). Consequently, the causal link between the
-    # last token of Row N and the first token of Row N+1 is discarded.
-    # We drop (batch_size - 1) causal edges per micro-batch. Across 103M
-    # tokens, this is statistically negligible and preserves the O(1) speed
-    # of the memory-mapped loader.
-    # -----------------------------------------------------------------
+    total_train_tokens = len(train_data_map)
+    max_opt_steps = total_train_tokens // tokens_per_macro_batch
+
+    print(f"\n      📊 Train Dataset: {total_train_tokens:,} tokens")
+    print(f"      🎯 1 Epoch requires: {max_opt_steps} optimizer steps.")
 
     ckpt_dir = os.path.join(
         args.output_dir, args.exp_name.replace(":", "").replace(" ", "_"), "checkpoints"
@@ -224,98 +244,87 @@ def main():
             ckpt_manager.latest_step(), args=ocp.args.StandardRestore(state)
         )
 
-    start_micro_step = int(state.step)
+    start_opt_step = int(state.step)
     current_data_idx = int(state.data_index)
 
     print(f"\n🚀 [PID: {os.getpid()}] Starting Training: {args.exp_name}")
     print(
-        f"      Resuming at Micro-Step: {start_micro_step} | Data Index: {current_data_idx}"
+        f"      Resuming at Opt-Step: {start_opt_step} | Data Index: {current_data_idx}"
     )
 
     log_data = []
     log_file = os.path.join(
         args.output_dir, f"{args.exp_name.replace(':', '').replace(' ', '_')}_logs.json"
     )
-    start_time = time.perf_counter()
-    accumulated_loss = 0.0
 
-    for micro_step in range(start_micro_step + 1, max_micro_steps + 1):
-        end_idx = current_data_idx + tokens_per_micro_batch
+    # -----------------------------------------------------------------
+    # MAIN TRAINING LOOP WITH TQDM
+    # -----------------------------------------------------------------
+    pbar = tqdm(
+        range(start_opt_step + 1, max_opt_steps + 1),
+        desc=f"Training {args.exp_name}",
+        initial=start_opt_step,
+        total=max_opt_steps,
+    )
+
+    for opt_step in pbar:
+        end_idx = current_data_idx + tokens_per_macro_batch
         if end_idx > len(train_data_map):
-            print("      ⚠️ Reached end of dataset! Ending epoch.")
+            tqdm.write("      ⚠️ Reached end of dataset! Ending epoch.")
             break
 
         raw_batch = train_data_map[current_data_idx:end_idx].astype(np.int32)
-        batch = jnp.array(raw_batch.reshape(args.micro_batch_size, args.seq_len + 1))
+        # Reshape into (grad_accum_steps, micro_batch_size, seq_len + 1)
+        macro_batch = jnp.array(
+            raw_batch.reshape(
+                args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1
+            )
+        )
 
         current_data_idx = end_idx
         state = state.replace(data_index=jnp.array(current_data_idx, dtype=jnp.int32))
 
         dropout_rng, step_dropout_rng = jax.random.split(dropout_rng)
 
-        # JIT-compiled training step
-        state, loss, grad_norm = train_step(state, batch, step_dropout_rng)
+        # JIT-compiled macro step executed entirely on GPU
+        state, loss, grad_norm = train_step(state, macro_batch, step_dropout_rng)
 
-        # -----------------------------------------------------------------
-        # MEMORY LEAK FIX (Training)
-        # -----------------------------------------------------------------
-        accumulated_loss += float(loss)
+        # Float cast forces CPU sync, freeing GPU memory instantly
+        avg_train_loss = float(loss)
+        train_ppl = math.exp(avg_train_loss) if avg_train_loss < 20 else float("inf")
+        gnorm = float(grad_norm)
 
-        if micro_step % args.grad_accum_steps == 0:
-            opt_step = micro_step // args.grad_accum_steps
+        # Update progress bar
+        pbar.set_postfix({"Loss": f"{avg_train_loss:.4f}", "PPL": f"{train_ppl:.2f}"})
 
-            if opt_step % args.log_interval == 0:
-                avg_train_loss = accumulated_loss / (
-                    args.log_interval * args.grad_accum_steps
-                )
-                train_ppl = (
-                    math.exp(avg_train_loss) if avg_train_loss < 20 else float("inf")
-                )
-                gnorm = float(grad_norm)
+        if opt_step % args.log_interval == 0:
+            log_data.append(
+                {
+                    "opt_step": opt_step,
+                    "train_loss": avg_train_loss,
+                    "train_perplexity": train_ppl,
+                    "grad_norm": gnorm,
+                }
+            )
+            with open(log_file, "w") as f:
+                json.dump(log_data, f, indent=4)
 
-                elapsed = time.perf_counter() - start_time
-                steps_per_sec = args.log_interval / elapsed
+        if opt_step % args.save_interval == 0 or opt_step == max_opt_steps:
+            tqdm.write(
+                f"\n      💾 Saving checkpoint at Opt Step {opt_step} (Data Index: {current_data_idx})..."
+            )
+            ckpt_manager.save(opt_step, args=ocp.args.StandardSave(state))
+            ckpt_manager.wait_until_finished()
 
-                print(
-                    f"      Opt Step {opt_step:05d}/{max_opt_steps} | "
-                    f"Train Loss: {avg_train_loss:.4f} | Train PPL: {train_ppl:.2f} | "
-                    f"GradNorm: {gnorm:.2f} | Steps/s: {steps_per_sec:.2f}"
-                )
+            val_loss, val_ppl = run_validation(state, val_data_map, args)
+            tqdm.write(
+                f"      ⭐ Validation Complete | Val Loss: {val_loss:.4f} | Val PPL: {val_ppl:.2f}\n"
+            )
 
-                log_data.append(
-                    {
-                        "opt_step": opt_step,
-                        "train_loss": avg_train_loss,
-                        "train_perplexity": train_ppl,
-                        "grad_norm": gnorm,
-                    }
-                )
-
-                accumulated_loss = 0.0
-                start_time = time.perf_counter()
-
-                with open(log_file, "w") as f:
-                    json.dump(log_data, f, indent=4)
-
-            if opt_step % args.save_interval == 0 or opt_step == max_opt_steps:
-                print(f"      🔬 Running validation over full hold-out set...")
-                val_loss, val_ppl = run_validation(state, val_data_map, args)
-                print(
-                    f"      ⭐ Validation Complete | Val Loss: {val_loss:.4f} | Val PPL: {val_ppl:.2f}"
-                )
-
-                log_data[-1]["val_loss"] = val_loss
-                log_data[-1]["val_perplexity"] = val_ppl
-                with open(log_file, "w") as f:
-                    json.dump(log_data, f, indent=4)
-
-                print(
-                    f"      💾 Saving checkpoint at Opt Step {opt_step} (Data Index: {current_data_idx})..."
-                )
-                ckpt_manager.save(opt_step, args=ocp.args.StandardSave(state))
-                ckpt_manager.wait_until_finished()
-
-                start_time = time.perf_counter()
+            log_data[-1]["val_loss"] = val_loss
+            log_data[-1]["val_perplexity"] = val_ppl
+            with open(log_file, "w") as f:
+                json.dump(log_data, f, indent=4)
 
     print(f"✅ Training for {args.exp_name} completed successfully.")
 
