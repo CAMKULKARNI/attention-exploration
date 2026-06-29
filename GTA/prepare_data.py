@@ -6,7 +6,10 @@ from transformers import AutoTokenizer
 
 def prepare_split(split_name, output_file):
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
-    dataset = load_dataset("wikitext", "wikitext-103-raw-v1", split=split_name)
+    # FIX: Added 'Salesforce/' namespace to the dataset name
+    dataset = load_dataset(
+        "Salesforce/wikitext", "wikitext-103-raw-v1", split=split_name
+    )
 
     print(f"Tokenizing WikiText-103 '{split_name}' split. This will take a moment...")
     all_tokens = []

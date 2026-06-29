@@ -3,3 +3,4 @@
 .vscode
 **/results-tpot-all.json
 **/temp.py
+**/*.bin

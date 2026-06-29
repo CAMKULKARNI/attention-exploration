@@ -83,7 +83,7 @@ def create_train_state(rng, model, args, max_opt_steps):
 
 
 @jax.jit
-def train_step(state, batch, dropout_rng, accum_steps):
+def train_step(state, batch, dropout_rng):
     inputs = batch[:, :-1]
     targets = batch[:, 1:]
 
@@ -105,15 +105,13 @@ def train_step(state, batch, dropout_rng, accum_steps):
     grad_fn = jax.value_and_grad(loss_fn)
     loss, grads = grad_fn(state.params)
 
-    # -----------------------------------------------------------------
-    # GRADIENT SCALING FIX
-    # Scale gradients down so that optax.MultiSteps (which sums them) 
-    # provides the mathematically correct average to AdamW and the Clipper.
-    # -----------------------------------------------------------------
-    scaled_grads = jax.tree_util.tree_map(lambda g: g / accum_steps, grads)
-    state = state.apply_updates(grads=scaled_grads)
-    
-    # Calculate norm on the unscaled micro-batch grads for accurate observability
+    state = state.apply_gradients(grads=grads)
+
+    # Grad norm computed on the per-micro-batch gradient for observability.
+    # Note: this reports the variance of individual micro-batch gradients,
+    # not the accumulated gradient that AdamW actually applies once every
+    # grad_accum_steps calls -- expect this to look noisier than a true
+    # per-optimizer-step norm, by design.
     grad_norm = jnp.sqrt(
         sum([jnp.sum(jnp.square(x)) for x in jax.tree_util.tree_leaves(grads)])
     )
@@ -183,7 +181,7 @@ def main():
     print(
         f"      🎯 1 Epoch requires: {max_opt_steps} optimizer steps ({max_micro_steps} micro-batches)."
     )
-    
+
     # -----------------------------------------------------------------
     # METHODOLOGY NOTE (Causal Transitions)
     # The dataloader dynamically slices 1D arrays into 2D chunks of shape
@@ -198,7 +196,7 @@ def main():
         args.output_dir, args.exp_name.replace(":", "").replace(" ", "_"), "checkpoints"
     )
     os.makedirs(ckpt_dir, exist_ok=True)
-    options = ocp.CheckpointManagerOptions(max_to_keep=2, create=True)
+    options = ocp.CheckpointManagerOptions(max_to_keep=3, create=True)
     ckpt_manager = ocp.CheckpointManager(os.path.abspath(ckpt_dir), options=options)
 
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
@@ -254,11 +252,9 @@ def main():
         state = state.replace(data_index=jnp.array(current_data_idx, dtype=jnp.int32))
 
         dropout_rng, step_dropout_rng = jax.random.split(dropout_rng)
-        
-        # Passed args.grad_accum_steps cleanly into the JIT function
-        state, loss, grad_norm = train_step(
-            state, batch, step_dropout_rng, args.grad_accum_steps
-        )
+
+        # JIT-compiled training step
+        state, loss, grad_norm = train_step(state, batch, step_dropout_rng)
 
         # -----------------------------------------------------------------
         # MEMORY LEAK FIX (Training)
@@ -269,8 +265,12 @@ def main():
             opt_step = micro_step // args.grad_accum_steps
 
             if opt_step % args.log_interval == 0:
-                avg_train_loss = accumulated_loss / (args.log_interval * args.grad_accum_steps)
-                train_ppl = math.exp(avg_train_loss) if avg_train_loss < 20 else float("inf")
+                avg_train_loss = accumulated_loss / (
+                    args.log_interval * args.grad_accum_steps
+                )
+                train_ppl = (
+                    math.exp(avg_train_loss) if avg_train_loss < 20 else float("inf")
+                )
                 gnorm = float(grad_norm)
 
                 elapsed = time.perf_counter() - start_time
