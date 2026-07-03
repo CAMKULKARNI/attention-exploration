@@ -2,8 +2,8 @@
 
 # Configuration
 SEQ_LEN=512
-MICRO_BATCH=2        # Tune this depending on your 8GB VRAM limit
-GRAD_ACCUM=16        # Effective batch size = MICRO_BATCH * GRAD_ACCUM (2 * 16 = 32)
+MICRO_BATCH=1        # Tune this depending on your 8GB VRAM limit
+GRAD_ACCUM=8        # Effective batch size = MICRO_BATCH * GRAD_ACCUM (1 * 8 = 8)
 OUTPUT_DIR="./training_logs"
 
 mkdir -p "$OUTPUT_DIR"

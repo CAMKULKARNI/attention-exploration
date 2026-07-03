@@ -33,7 +33,6 @@ def apply_rope(x, start_pos, inv_freq):
     seq_len = x.shape[2]
     depth = x.shape[3]
 
-    # Use base array + dynamic offset to prevent JIT tracing errors
     positions = start_pos + jnp.arange(seq_len, dtype=jnp.float32)
     positions = positions.reshape(-1, 1)
 
@@ -56,11 +55,11 @@ class TiedAttention(nn.Module):
     latent_dim: int
     num_heads: int
     max_seq_len: int
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(
-        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
-    ):
+    def __call__(self, x, start_pos=0, cache=None):
         depth = self.latent_dim // self.num_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
@@ -95,8 +94,6 @@ class TiedAttention(nn.Module):
         inv_sqrt_depth = 1.0 / math.sqrt(depth)
         scaled_attention_logits = matmul_qa.astype(jnp.float32) * inv_sqrt_depth
 
-        # num_heads is a compile-time module attribute; XLA constant-folds this
-        # across all decode steps, so no per-step allocation occurs at runtime.
         alibi_slopes = get_alibi_slopes(self.num_heads)
 
         q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
@@ -110,7 +107,7 @@ class TiedAttention(nn.Module):
         valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
         scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
 
-        if use_causal_mask:
+        if self.use_causal_mask:
             causal_mask = (kv_range <= q_idx).astype(jnp.float32)
             scaled_attention_logits += (1.0 - causal_mask) * -1e9
 
@@ -119,7 +116,7 @@ class TiedAttention(nn.Module):
         )
 
         attention_weights = nn.Dropout(rate=0.1)(
-            attention_weights, deterministic=deterministic
+            attention_weights, deterministic=self.deterministic
         )
 
         output = jnp.matmul(attention_weights, a_use).transpose(0, 2, 1, 3)
@@ -137,43 +134,20 @@ class TiedAttention(nn.Module):
 
 
 class GroupTiedAttention(nn.Module):
-    """Group Tied Attention (GTA).
-
-    Extends TiedAttention by reducing the A-tensor head count from
-    num_heads down to num_a_heads (analogous to num_kv_heads in GQA).
-    This produces a KV cache of shape [batch, num_a_heads, max_len, depth],
-    which is 4x smaller than standard GTA and smaller than GQA's paired
-    (K, V) cache at the same head count.
-
-    Design space position:
-        Full-heads tied  → TiedAttention          (TA)
-        Reduced-heads tied → GroupTiedAttention (GTA)   ← this class
-        Reduced-heads separate KV → GroupedQueryAttention (GQA)
-
-    The Q projection uses num_heads (full query heads) throughout.
-    The A projection uses num_a_heads, then the cache is expanded to
-    num_heads via broadcast_to before the attention matmul — identical
-    to GQA's K/V head expansion pattern.
-    ALiBi slopes are computed for num_heads so every query head gets
-    a correctly-scaled positional bias.
-    """
-
     latent_dim: int
     num_heads: int
-    num_a_heads: int  # reduced head count for the A tensor (e.g. 4)
+    num_a_heads: int
     max_seq_len: int
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(
-        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
-    ):
+    def __call__(self, x, start_pos=0, cache=None):
         depth = self.latent_dim // self.num_heads
         num_queries_per_a = self.num_heads // self.num_a_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
 
-        # Q projects to full latent_dim; A projects to num_a_heads * depth.
-        # Both use bfloat16 natively — symmetric with every other variant.
         wq = nn.Dense(
             self.latent_dim,
             use_bias=False,
@@ -201,22 +175,17 @@ class GroupTiedAttention(nn.Module):
 
         kv_seq_len = a_use.shape[2]
 
-        # Expand A from num_a_heads to num_heads via broadcast_to.
-        # Identical pattern to GQA's K/V head expansion — zero-copy view.
         a_use_exp = a_use.reshape(batch_size, self.num_a_heads, 1, kv_seq_len, depth)
         a_use_rep = jnp.broadcast_to(
             a_use_exp,
             (batch_size, self.num_a_heads, num_queries_per_a, kv_seq_len, depth),
         ).reshape(batch_size, self.num_heads, kv_seq_len, depth)
 
-        # Q * A^T attention logits — symmetric with GTA
         a_t = a_use_rep.transpose(0, 1, 3, 2)
         matmul_qa = jnp.matmul(q, a_t)
         inv_sqrt_depth = 1.0 / math.sqrt(depth)
         scaled_attention_logits = matmul_qa.astype(jnp.float32) * inv_sqrt_depth
 
-        # ALiBi slopes over num_heads query heads — same as GTA
-        # num_heads is compile-time; XLA constant-folds this.
         alibi_slopes = get_alibi_slopes(self.num_heads)
 
         q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
@@ -230,7 +199,7 @@ class GroupTiedAttention(nn.Module):
         valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
         scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
 
-        if use_causal_mask:
+        if self.use_causal_mask:
             causal_mask = (kv_range <= q_idx).astype(jnp.float32)
             scaled_attention_logits += (1.0 - causal_mask) * -1e9
 
@@ -239,10 +208,9 @@ class GroupTiedAttention(nn.Module):
         )
 
         attention_weights = nn.Dropout(rate=0.1)(
-            attention_weights, deterministic=deterministic
+            attention_weights, deterministic=self.deterministic
         )
 
-        # Output matmul uses the expanded a_use_rep — symmetric with TA
         output = jnp.matmul(attention_weights, a_use_rep).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
@@ -262,20 +230,16 @@ class GroupedQueryAttention(nn.Module):
     num_heads: int
     num_kv_heads: int
     max_seq_len: int
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(
-        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
-    ):
+    def __call__(self, x, start_pos=0, cache=None):
         depth = self.latent_dim // self.num_heads
         num_queries_per_kv = self.num_heads // self.num_kv_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
 
-        # -----------------------------------------------------------------
-        # OPTIMIZATION: STRICT NATIVE DTYPES
-        # Forces native 16-bit execution to avoid defensive casts later.
-        # -----------------------------------------------------------------
         wq = nn.Dense(
             self.latent_dim,
             use_bias=False,
@@ -312,7 +276,6 @@ class GroupedQueryAttention(nn.Module):
 
         if cache is not None:
             k_cache, v_cache = cache
-            # Defensive casts removed; layers inherently match the cache dtype
             k_use = jax.lax.dynamic_update_slice(k_cache, new_k, (0, 0, start_pos, 0))
             v_use = jax.lax.dynamic_update_slice(v_cache, new_v, (0, 0, start_pos, 0))
             new_cache = (k_use, v_use)
@@ -322,7 +285,6 @@ class GroupedQueryAttention(nn.Module):
 
         kv_seq_len = k_use.shape[2]
 
-        # Replace jnp.repeat with broadcast_to for true zero-copy expansion
         k_use_exp = k_use.reshape(batch_size, self.num_kv_heads, 1, kv_seq_len, depth)
         k_use_rep = jnp.broadcast_to(
             k_use_exp,
@@ -337,12 +299,7 @@ class GroupedQueryAttention(nn.Module):
 
         k_t = k_use_rep.transpose(0, 1, 3, 2)
 
-        # Standard cuBLAS Matmul replaces the slow einsum
         matmul_qk = jnp.matmul(q, k_t)
-
-        # -----------------------------------------------------------------
-        # OPTIMIZATION: ARITHMETIC INTENSITY
-        # -----------------------------------------------------------------
         inv_sqrt_depth = 1.0 / math.sqrt(depth)
         scaled_attention_logits = matmul_qk.astype(jnp.float32) * inv_sqrt_depth
 
@@ -353,7 +310,7 @@ class GroupedQueryAttention(nn.Module):
         valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
         scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
 
-        if use_causal_mask:
+        if self.use_causal_mask:
             causal_mask = (kv_range <= q_idx).astype(jnp.float32)
             scaled_attention_logits += (1.0 - causal_mask) * -1e9
 
@@ -362,10 +319,9 @@ class GroupedQueryAttention(nn.Module):
         )
 
         attention_weights = nn.Dropout(rate=0.1)(
-            attention_weights, deterministic=deterministic
+            attention_weights, deterministic=self.deterministic
         )
 
-        # Standard cuBLAS Matmul replaces the output einsum
         output = jnp.matmul(attention_weights, v_use_rep).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
 
@@ -384,11 +340,11 @@ class MultiHeadAttention(nn.Module):
     latent_dim: int
     num_heads: int
     max_seq_len: int
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(
-        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
-    ):
+    def __call__(self, x, start_pos=0, cache=None):
         depth = self.latent_dim // self.num_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
@@ -439,7 +395,7 @@ class MultiHeadAttention(nn.Module):
         valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
         scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
 
-        if use_causal_mask:
+        if self.use_causal_mask:
             causal_mask = (kv_range <= q_idx).astype(jnp.float32)
             scaled_attention_logits += (1.0 - causal_mask) * -1e9
 
@@ -448,7 +404,7 @@ class MultiHeadAttention(nn.Module):
         )
 
         attention_weights = nn.Dropout(rate=0.1)(
-            attention_weights, deterministic=deterministic
+            attention_weights, deterministic=self.deterministic
         )
 
         output = jnp.matmul(attention_weights, v_use).transpose(0, 2, 1, 3)
@@ -469,11 +425,11 @@ class MultiHeadAttentionRoPE(nn.Module):
     latent_dim: int
     num_heads: int
     max_seq_len: int
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(
-        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
-    ):
+    def __call__(self, x, start_pos=0, cache=None):
         depth = self.latent_dim // self.num_heads
         batch_size = x.shape[0]
         q_seq_len = x.shape[1]
@@ -497,7 +453,6 @@ class MultiHeadAttentionRoPE(nn.Module):
             param_dtype=jnp.bfloat16,
         )(x)
 
-        # Identical RoPE construction to GQA — this is the symmetry requirement
         inv_freq = (
             1.0 / (10000.0 ** (jnp.arange(0, depth, 2, dtype=jnp.float32) / depth))
         ).reshape(1, -1)
@@ -506,7 +461,6 @@ class MultiHeadAttentionRoPE(nn.Module):
         new_k = wk.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
         new_v = wv.reshape(batch_size, -1, self.num_heads, depth).transpose(0, 2, 1, 3)
 
-        # Apply RoPE — identical call signature to GQA
         q = apply_rope(q, start_pos, inv_freq)
         new_k = apply_rope(new_k, start_pos, inv_freq)
 
@@ -525,7 +479,6 @@ class MultiHeadAttentionRoPE(nn.Module):
         inv_sqrt_depth = 1.0 / math.sqrt(depth)
         scaled_attention_logits = matmul_qk.astype(jnp.float32) * inv_sqrt_depth
 
-        # Identical masking logic to MHA — symmetric
         q_idx = start_pos + jnp.arange(q_seq_len, dtype=jnp.float32)
         q_idx = q_idx.reshape(1, 1, -1, 1)
         kv_range = jnp.arange(kv_seq_len, dtype=jnp.float32).reshape(1, 1, 1, -1)
@@ -533,7 +486,7 @@ class MultiHeadAttentionRoPE(nn.Module):
         valid_cache_mask = (kv_range < (start_pos + q_seq_len)).astype(jnp.float32)
         scaled_attention_logits += (1.0 - valid_cache_mask) * -1e9
 
-        if use_causal_mask:
+        if self.use_causal_mask:
             causal_mask = (kv_range <= q_idx).astype(jnp.float32)
             scaled_attention_logits += (1.0 - causal_mask) * -1e9
 
@@ -542,7 +495,7 @@ class MultiHeadAttentionRoPE(nn.Module):
         )
 
         attention_weights = nn.Dropout(rate=0.1)(
-            attention_weights, deterministic=deterministic
+            attention_weights, deterministic=self.deterministic
         )
         output = jnp.matmul(attention_weights, v_use).transpose(0, 2, 1, 3)
         output = output.reshape(batch_size, -1, self.latent_dim)
@@ -564,68 +517,57 @@ class DecoderBlock(nn.Module):
     attn_type: str
     max_seq_len: int
     num_kv_heads: int = 4
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(
-        self, x, use_causal_mask=False, start_pos=0, cache=None, deterministic=True
-    ):
+    def __call__(self, x, start_pos=0, cache=None):
         x_norm = nn.LayerNorm(epsilon=1e-6)(x)
 
         if self.attn_type == "ta":
             attn_out, new_cache = TiedAttention(
-                self.latent_dim, self.num_heads, self.max_seq_len
-            )(
-                x_norm,
-                use_causal_mask=use_causal_mask,
-                start_pos=start_pos,
-                cache=cache,
-                deterministic=deterministic,
-            )
+                latent_dim=self.latent_dim,
+                num_heads=self.num_heads,
+                max_seq_len=self.max_seq_len,
+                use_causal_mask=self.use_causal_mask,
+                deterministic=self.deterministic,
+            )(x_norm, start_pos, cache)
         elif self.attn_type == "gta":
             attn_out, new_cache = GroupTiedAttention(
-                self.latent_dim, self.num_heads, self.num_kv_heads, self.max_seq_len
-            )(
-                x_norm,
-                use_causal_mask=use_causal_mask,
-                start_pos=start_pos,
-                cache=cache,
-                deterministic=deterministic,
-            )
+                latent_dim=self.latent_dim,
+                num_heads=self.num_heads,
+                num_a_heads=self.num_kv_heads,
+                max_seq_len=self.max_seq_len,
+                use_causal_mask=self.use_causal_mask,
+                deterministic=self.deterministic,
+            )(x_norm, start_pos, cache)
         elif self.attn_type == "gqa":
             attn_out, new_cache = GroupedQueryAttention(
-                self.latent_dim, self.num_heads, self.num_kv_heads, self.max_seq_len
-            )(
-                x_norm,
-                use_causal_mask=use_causal_mask,
-                start_pos=start_pos,
-                cache=cache,
-                deterministic=deterministic,
-            )
+                latent_dim=self.latent_dim,
+                num_heads=self.num_heads,
+                num_kv_heads=self.num_kv_heads,
+                max_seq_len=self.max_seq_len,
+                use_causal_mask=self.use_causal_mask,
+                deterministic=self.deterministic,
+            )(x_norm, start_pos, cache)
         elif self.attn_type == "mha":
             attn_out, new_cache = MultiHeadAttention(
-                self.latent_dim, self.num_heads, self.max_seq_len
-            )(
-                x_norm,
-                use_causal_mask=use_causal_mask,
-                start_pos=start_pos,
-                cache=cache,
-                deterministic=deterministic,
-            )
+                latent_dim=self.latent_dim,
+                num_heads=self.num_heads,
+                max_seq_len=self.max_seq_len,
+                use_causal_mask=self.use_causal_mask,
+                deterministic=self.deterministic,
+            )(x_norm, start_pos, cache)
         elif self.attn_type == "mha_rope":
             attn_out, new_cache = MultiHeadAttentionRoPE(
-                self.latent_dim, self.num_heads, self.max_seq_len
-            )(
-                x_norm,
-                use_causal_mask=use_causal_mask,
-                start_pos=start_pos,
-                cache=cache,
-                deterministic=deterministic,
-            )
+                latent_dim=self.latent_dim,
+                num_heads=self.num_heads,
+                max_seq_len=self.max_seq_len,
+                use_causal_mask=self.use_causal_mask,
+                deterministic=self.deterministic,
+            )(x_norm, start_pos, cache)
         else:
-            raise ValueError(
-                f"Unknown attn_type '{self.attn_type}'. "
-                f"Expected one of: 'ta', 'gta', 'gqa', 'mha', 'mha_rope'."
-            )
+            raise ValueError(f"Unknown attn_type '{self.attn_type}'.")
 
         x = x + attn_out
 
@@ -640,7 +582,7 @@ class DecoderBlock(nn.Module):
 
         ffn_out = nn.gelu(ffn_out)
 
-        ffn_out = nn.Dropout(rate=0.1)(ffn_out, deterministic=deterministic)
+        ffn_out = nn.Dropout(rate=0.1)(ffn_out, deterministic=self.deterministic)
 
         ffn_out = nn.Dense(
             self.latent_dim,
@@ -662,9 +604,11 @@ class CausalLM(nn.Module):
     num_layers: int
     attn_type: str
     num_kv_heads: int = 4
+    use_causal_mask: bool = True
+    deterministic: bool = True
 
     @nn.compact
-    def __call__(self, inputs, use_causal_mask=False, current_pos=0, caches=None, deterministic=True):
+    def __call__(self, inputs, current_pos=0, caches=None):
         seq_len = inputs.shape[-1]
 
         token_emb = nn.Embed(num_embeddings=self.vocab_size, features=self.latent_dim)
@@ -679,28 +623,29 @@ class CausalLM(nn.Module):
             x = x + pos_emb(positions)
 
         new_caches = []
+
+        # -----------------------------------------------------------------
+        # FIX: PURE REMAT WITHOUT BOOLS
+        # Because we moved the booleans to the Module definition, nn.remat
+        # only traces arrays (x, current_pos, layer_cache), completely
+        # eliminating the TracerBoolConversionError.
+        # -----------------------------------------------------------------
+        RematDecoderBlock = nn.remat(DecoderBlock)
+
         for i in range(self.num_layers):
             layer_cache = caches[i] if caches is not None else None
-            x, layer_new_cache = DecoderBlock(
-                self.latent_dim,
-                self.num_heads,
-                self.attn_type,
-                self.max_seq_len,
-                self.num_kv_heads,
-            )(
-                x,
-                use_causal_mask=use_causal_mask,
-                start_pos=current_pos,
-                cache=layer_cache,
-                deterministic=deterministic,
-            )
+            x, layer_new_cache = RematDecoderBlock(
+                latent_dim=self.latent_dim,
+                num_heads=self.num_heads,
+                attn_type=self.attn_type,
+                max_seq_len=self.max_seq_len,
+                num_kv_heads=self.num_kv_heads,
+                use_causal_mask=self.use_causal_mask,
+                deterministic=self.deterministic,
+            )(x, current_pos, layer_cache)
             new_caches.append(layer_new_cache)
 
         x = nn.LayerNorm(epsilon=1e-6)(x)
-        # Cast to float32 at the model boundary. token_emb.attend(x) produces
-        # bfloat16 logits over a 50k-class vocabulary. Upcasting here costs
-        # one cheap elementwise op and ensures downstream consumers (argmax,
-        # softmax sampling, cross-entropy loss) operate with full precision.
         logits = token_emb.attend(x).astype(jnp.float32)
 
         return logits, new_caches

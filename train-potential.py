@@ -40,7 +40,6 @@ def parse_args():
 
 
 def rss_gb():
-    """Current process RSS in GiB (Linux /proc/self/status is more accurate than resource)."""
     try:
         with open("/proc/self/status") as f:
             for line in f:
@@ -68,9 +67,6 @@ def release_ram():
 
 
 def log_runtime_state(tag):
-    """Diagnostic snapshot: thread count/names + GPU + host memory.
-    Cheap to call often; helps confirm whether checkpoint manager threads
-    are actually being torn down between saves."""
     try:
         names = [t.name for t in threading.enumerate()]
         print(f"      🧵 [{tag}] threads={threading.active_count()} names={names}")
@@ -131,10 +127,6 @@ def create_train_state(rng, model, args, max_opt_steps):
     )
 
 
-# -----------------------------------------------------------------
-# FIX: STATIC ARGS VIA FUNCTOOLS
-# We tell jax.jit to treat the "model" argument as static (index 1)
-# -----------------------------------------------------------------
 @functools.partial(jax.jit, static_argnums=(1,))
 def train_step(state, model, macro_batch, dropout_rng):
     def body_fn(carry, micro_batch):
@@ -259,9 +251,6 @@ def main():
     print(f"\n      📊 Train Dataset: {total_train_tokens:,} tokens")
     print(f"      🎯 1 Epoch requires: {max_opt_steps} optimizer steps.")
 
-    # -----------------------------------------------------------------
-    # RESTORED: DECOUPLED CHECKPOINT MANAGERS
-    # -----------------------------------------------------------------
     ckpt_dir_weights = os.path.join(
         args.output_dir,
         args.exp_name.replace(":", "").replace(" ", "_"),
@@ -280,10 +269,6 @@ def main():
     tokenizer.pad_token = tokenizer.eos_token
     config_obj = Config(tokenizer)
 
-    # -----------------------------------------------------------------
-    # EXPLICIT MODEL DEFINITIONS
-    # model_train handles the dropout; model_eval runs clean forward passes
-    # -----------------------------------------------------------------
     model_train = CausalLM(
         vocab_size=config_obj.vocab_size,
         max_seq_len=args.seq_len,
@@ -313,10 +298,6 @@ def main():
 
     state = create_train_state(init_rng, model_train, args, max_opt_steps)
 
-    # -----------------------------------------------------------------
-    # INITIAL RESTORATION (EPHEMERAL)
-    # We create the managers to load the state, and immediately destroy them.
-    # -----------------------------------------------------------------
     options = ocp.CheckpointManagerOptions(max_to_keep=1, create=True)
     ckpt_manager_weights = ocp.CheckpointManager(
         os.path.abspath(ckpt_dir_weights), options=options
@@ -351,40 +332,12 @@ def main():
             opt_state=restored_opt,
         )
 
-        del restored_w
-        del restored_opt
-        del target_weights
-
-    # Properly shut down the async checkpointer threads before dropping the
-    # Python references. del + gc.collect() alone does NOT guarantee Orbax's
-    # background writer thread pool is joined/terminated - close() does.
     ckpt_manager_weights.close()
     ckpt_manager_opt.close()
     del ckpt_manager_weights
     del ckpt_manager_opt
     release_ram()
     log_runtime_state("after_initial_restore_close")
-
-    # -----------------------------------------------------------------
-    # XLA COMPILATION WARMUP
-    # Forces XLA to lock in optimal VRAM layouts for BOTH train & eval
-    # simultaneously, preventing silent speed drops during checkpoints.
-    # -----------------------------------------------------------------
-    print(f"\n      🔥 Warming up XLA compilation (Train & Eval)...")
-    dummy_macro_batch = jnp.zeros(
-        (args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1),
-        dtype=jnp.int32,
-    )
-    dummy_eval_batch = jnp.zeros(
-        (args.micro_batch_size, args.seq_len + 1), dtype=jnp.int32
-    )
-
-    _, _, _ = train_step(state, model_train, dummy_macro_batch, dropout_rng)
-    _ = eval_step(state, model_eval, dummy_eval_batch)
-
-    jax.block_until_ready(_)
-    print(f"      ✅ Warmup complete. High-speed kernels locked.\n")
-    # -----------------------------------------------------------------
 
     start_opt_step = int(state.step)
     current_data_idx = int(state.data_index)
@@ -449,13 +402,11 @@ def main():
         )
 
         if opt_step % args.save_interval == 0 or opt_step == max_opt_steps:
-            # 1. RUN VALIDATION FIRST
             val_loss, val_ppl = run_validation(state, model_eval, val_data_map, args)
             tqdm.write(
                 f"      ⭐ Validation Complete | Val Loss: {val_loss:.4f} | Val PPL: {val_ppl:.2f}\n"
             )
 
-            # 2. FORCE SYNC AND GARBAGE COLLECT
             jax.block_until_ready((val_loss, val_ppl))
             release_ram()
 
@@ -463,7 +414,6 @@ def main():
 
             # -----------------------------------------------------------------
             # EPHEMERAL SAVING (WEIGHTS)
-            # Create, Save, Wait, Close, and DESTROY to release memory + threads
             # -----------------------------------------------------------------
             tqdm.write(
                 f"\n      💾 Saving Weights at Opt Step {opt_step} (Data Index: {current_data_idx})..."
@@ -481,13 +431,8 @@ def main():
                 opt_step, args=ocp.args.StandardSave(save_weights)
             )
             ckpt_manager_weights.wait_until_finished()
-
-            # close() joins/terminates the async writer thread pool; del alone
-            # does not guarantee this, since CheckpointManager relies on an
-            # explicit close() rather than a deterministic __del__.
             ckpt_manager_weights.close()
 
-            # Annihilate the manager and dictionaries to drop RAM back to 6 GB
             del save_weights
             del ckpt_manager_weights
             release_ram()
@@ -502,16 +447,11 @@ def main():
 
             ckpt_manager_opt.save(opt_step, args=ocp.args.StandardSave(state.opt_state))
             ckpt_manager_opt.wait_until_finished()
-
-            # Same reasoning: close before dropping the reference.
             ckpt_manager_opt.close()
 
-            # Annihilate the manager
             del ckpt_manager_opt
             release_ram()
 
-            # Make sure the live training state itself (not just the val
-            # scalars) is fully synced before we resume the loop.
             jax.block_until_ready(state)
 
             log_runtime_state(f"post_checkpoint_opt{opt_step}")
