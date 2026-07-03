@@ -2,8 +2,8 @@
 
 # Configuration
 SEQ_LEN=512
-MICRO_BATCH=1        # Tune this depending on your 8GB VRAM limit
-GRAD_ACCUM=8        # Effective batch size = MICRO_BATCH * GRAD_ACCUM (1 * 8 = 8)
+MICRO_BATCH=2        # Tune this depending on your 8GB VRAM limit
+GRAD_ACCUM=16        # Effective batch size = MICRO_BATCH * GRAD_ACCUM (2 * 16 = 32)
 OUTPUT_DIR="./training_logs"
 
 mkdir -p "$OUTPUT_DIR"
@@ -33,6 +33,25 @@ for EXP_ID in "${EXPS[@]}"; do
         *) echo "[!] Unknown EXP_ID '$EXP_ID'"; continue ;;
     esac
     
+    # Sanitize name to match Python's output format
+    SAFE_NAME="${NAME//:/}"
+    SAFE_NAME="${SAFE_NAME// /_}"
+    
+    DONE_FILE="$OUTPUT_DIR/${SAFE_NAME}_DONE.txt"
+    LOG_FILE="$OUTPUT_DIR/${SAFE_NAME}_logs.json"
+
+    # Check if the experiment has already been fully completed
+    if [ -f "$DONE_FILE" ]; then
+        echo "⏭️  [SUCCESS] $NAME is already complete. Skipping."
+        continue
+    fi
+
+    # Check if artifacts exist from an incomplete run and delete them
+    if [ -f "$LOG_FILE" ]; then
+        echo "🧹 [CLEANUP] Incomplete run detected for $NAME. Deleting old logs..."
+        rm -f "$LOG_FILE"
+    fi
+
     echo "--> Initiating $NAME"
     # max_steps is automatically computed in train.py ensuring exactly 1 Epoch
     python train.py \
@@ -44,8 +63,8 @@ for EXP_ID in "${EXPS[@]}"; do
         --grad_accum_steps $GRAD_ACCUM \
         --output_dir "$OUTPUT_DIR"
         
-    echo "💤 Sleeping for 60 seconds to flush VRAM and stabilize thermals..."
-    sleep 60
+    echo "💤 Sleeping for 30 seconds to flush VRAM and stabilize thermals..."
+    sleep 30
 done
 
 echo "🎉 All training runs completed!"

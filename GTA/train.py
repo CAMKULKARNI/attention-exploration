@@ -7,7 +7,6 @@ import numpy as np
 import gc
 import resource
 import functools
-import threading
 from tqdm import tqdm
 
 os.environ["XLA_PYTHON_CLIENT_ALLOCATOR"] = "cuda_async"
@@ -29,8 +28,8 @@ def parse_args():
     parser.add_argument("--attn_type", type=str, required=True)
     parser.add_argument("--num_layers", type=int, required=True)
     parser.add_argument("--seq_len", type=int, default=512)
-    parser.add_argument("--micro_batch_size", type=int, default=1)
-    parser.add_argument("--grad_accum_steps", type=int, default=8)
+    parser.add_argument("--micro_batch_size", type=int, default=2)
+    parser.add_argument("--grad_accum_steps", type=int, default=16)
     parser.add_argument("--learning_rate", type=float, default=5e-4)
     parser.add_argument("--save_interval", type=int, default=148)
     parser.add_argument("--output_dir", type=str, default="./training_logs")
@@ -40,7 +39,6 @@ def parse_args():
 
 
 def rss_gb():
-    """Current process RSS in GiB (Linux /proc/self/status is more accurate than resource)."""
     try:
         with open("/proc/self/status") as f:
             for line in f:
@@ -53,10 +51,6 @@ def rss_gb():
 
 
 def release_ram():
-    """
-    Forces Python to garbage collect, and physically forces the Linux glibc
-    allocator to return freed memory pages back to the OS Page Cache.
-    """
     gc.collect()
     try:
         import ctypes
@@ -68,23 +62,13 @@ def release_ram():
 
 
 def log_runtime_state(tag):
-    """Diagnostic snapshot: thread count/names + GPU + host memory.
-    Cheap to call often; helps confirm whether checkpoint manager threads
-    are actually being torn down between saves."""
-    try:
-        names = [t.name for t in threading.enumerate()]
-        print(f"      🧵 [{tag}] threads={threading.active_count()} names={names}")
-    except Exception as e:
-        print(f"      🧵 [{tag}] thread introspection failed: {e}")
-
     try:
         stats = jax.devices()[0].memory_stats()
         in_use = stats.get("bytes_in_use", 0) / 1e9
         peak = stats.get("peak_bytes_in_use", 0) / 1e9
         print(f"      📈 [{tag}] GPU bytes_in_use={in_use:.2f}GB peak={peak:.2f}GB")
     except Exception as e:
-        print(f"      📈 [{tag}] GPU memory_stats failed: {e}")
-
+        pass
     print(f"      📈 [{tag}] Host RSS={rss_gb():.2f}GiB")
 
 
@@ -94,7 +78,6 @@ class ResumableTrainState(train_state.TrainState):
 
 def create_train_state(rng, model, args, max_opt_steps):
     dummy_input = jnp.zeros((args.micro_batch_size, args.seq_len), dtype=jnp.int32)
-
     print("      Initializing model weights...")
     variables = model.init(rng, dummy_input, current_pos=0)
 
@@ -131,10 +114,6 @@ def create_train_state(rng, model, args, max_opt_steps):
     )
 
 
-# -----------------------------------------------------------------
-# FIX: STATIC ARGS VIA FUNCTOOLS
-# We tell jax.jit to treat the "model" argument as static (index 1)
-# -----------------------------------------------------------------
 @functools.partial(jax.jit, static_argnums=(1,))
 def train_step(state, model, macro_batch, dropout_rng):
     def body_fn(carry, micro_batch):
@@ -246,8 +225,9 @@ def main():
     ):
         raise FileNotFoundError("Missing .bin files. Run prepare_data.py first.")
 
-    train_data_map = np.memmap(args.train_data_file, dtype=np.uint16, mode="r")
-    val_data_map = np.memmap(args.val_data_file, dtype=np.uint16, mode="r")
+    print("      Loading datasets entirely into RAM...")
+    train_data_map = np.fromfile(args.train_data_file, dtype=np.uint16)
+    val_data_map = np.fromfile(args.val_data_file, dtype=np.uint16)
 
     tokens_per_macro_batch = (
         args.grad_accum_steps * args.micro_batch_size * (args.seq_len + 1)
@@ -256,34 +236,13 @@ def main():
     total_train_tokens = len(train_data_map)
     max_opt_steps = total_train_tokens // tokens_per_macro_batch
 
-    print(f"\n      📊 Train Dataset: {total_train_tokens:,} tokens")
+    print(f"      📊 Train Dataset: {total_train_tokens:,} tokens")
     print(f"      🎯 1 Epoch requires: {max_opt_steps} optimizer steps.")
-
-    # -----------------------------------------------------------------
-    # RESTORED: DECOUPLED CHECKPOINT MANAGERS
-    # -----------------------------------------------------------------
-    ckpt_dir_weights = os.path.join(
-        args.output_dir,
-        args.exp_name.replace(":", "").replace(" ", "_"),
-        "checkpoints_weights",
-    )
-    ckpt_dir_opt = os.path.join(
-        args.output_dir,
-        args.exp_name.replace(":", "").replace(" ", "_"),
-        "checkpoints_opt",
-    )
-
-    os.makedirs(ckpt_dir_weights, exist_ok=True)
-    os.makedirs(ckpt_dir_opt, exist_ok=True)
 
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
     tokenizer.pad_token = tokenizer.eos_token
     config_obj = Config(tokenizer)
 
-    # -----------------------------------------------------------------
-    # EXPLICIT MODEL DEFINITIONS
-    # model_train handles the dropout; model_eval runs clean forward passes
-    # -----------------------------------------------------------------
     model_train = CausalLM(
         vocab_size=config_obj.vocab_size,
         max_seq_len=args.seq_len,
@@ -313,64 +272,7 @@ def main():
 
     state = create_train_state(init_rng, model_train, args, max_opt_steps)
 
-    # -----------------------------------------------------------------
-    # INITIAL RESTORATION (EPHEMERAL)
-    # We create the managers to load the state, and immediately destroy them.
-    # -----------------------------------------------------------------
-    options = ocp.CheckpointManagerOptions(max_to_keep=1, create=True)
-    ckpt_manager_weights = ocp.CheckpointManager(
-        os.path.abspath(ckpt_dir_weights), options=options
-    )
-    ckpt_manager_opt = ocp.CheckpointManager(
-        os.path.abspath(ckpt_dir_opt), options=options
-    )
-
-    latest_step = ckpt_manager_weights.latest_step()
-    if latest_step is not None:
-        print(f"      🔄 Resuming from optimizer step {latest_step}...")
-        target_weights = {
-            "params": state.params,
-            "step": state.step,
-            "data_index": state.data_index,
-        }
-        restored_w = ckpt_manager_weights.restore(
-            latest_step, args=ocp.args.StandardRestore(target_weights)
-        )
-        try:
-            restored_opt = ckpt_manager_opt.restore(
-                latest_step, args=ocp.args.StandardRestore(state.opt_state)
-            )
-        except Exception:
-            print("      ⚠️ Optimizer state missing. Resuming with fresh momentum.")
-            restored_opt = state.opt_state
-
-        state = state.replace(
-            step=restored_w["step"],
-            params=restored_w["params"],
-            data_index=restored_w["data_index"],
-            opt_state=restored_opt,
-        )
-
-        del restored_w
-        del restored_opt
-        del target_weights
-
-    # Properly shut down the async checkpointer threads before dropping the
-    # Python references. del + gc.collect() alone does NOT guarantee Orbax's
-    # background writer thread pool is joined/terminated - close() does.
-    ckpt_manager_weights.close()
-    ckpt_manager_opt.close()
-    del ckpt_manager_weights
-    del ckpt_manager_opt
-    release_ram()
-    log_runtime_state("after_initial_restore_close")
-
-    # -----------------------------------------------------------------
-    # XLA COMPILATION WARMUP
-    # Forces XLA to lock in optimal VRAM layouts for BOTH train & eval
-    # simultaneously, preventing silent speed drops during checkpoints.
-    # -----------------------------------------------------------------
-    print(f"\n      🔥 Warming up XLA compilation (Train & Eval)...")
+    print(f"\n      🔥 Warming up XLA compilation and aligning memory layouts...")
     dummy_macro_batch = jnp.zeros(
         (args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1),
         dtype=jnp.int32,
@@ -379,20 +281,17 @@ def main():
         (args.micro_batch_size, args.seq_len + 1), dtype=jnp.int32
     )
 
-    _, _, _ = train_step(state, model_train, dummy_macro_batch, dropout_rng)
+    _warmup_state, _, _ = train_step(state, model_train, dummy_macro_batch, dropout_rng)
+    del _warmup_state
     _ = eval_step(state, model_eval, dummy_eval_batch)
 
-    jax.block_until_ready(_)
-    print(f"      ✅ Warmup complete. High-speed kernels locked.\n")
-    # -----------------------------------------------------------------
+    jax.block_until_ready(state)
+    print(f"      ✅ Warmup complete. Fast kernels locked.\n")
 
-    start_opt_step = int(state.step)
-    current_data_idx = int(state.data_index)
+    start_opt_step = 0
+    current_data_idx = 0
 
-    print(f"\n🚀 [PID: {os.getpid()}] Starting Training: {args.exp_name}")
-    print(
-        f"      Resuming at Opt-Step: {start_opt_step} | Data Index: {current_data_idx}"
-    )
+    print(f"🚀 [PID: {os.getpid()}] Starting Training: {args.exp_name}")
     print(f"      RSS at training start: {rss_gb():.2f} GiB")
 
     log_file = os.path.join(
@@ -406,19 +305,13 @@ def main():
         total=max_opt_steps,
     )
 
-    log_runtime_state("training_loop_baseline")
-    just_checkpointed = False
-
     for opt_step in pbar:
-        if just_checkpointed:
-            log_runtime_state(f"first_step_after_ckpt_opt{opt_step}")
-            just_checkpointed = False
-
         end_idx = current_data_idx + tokens_per_macro_batch
         if end_idx > len(train_data_map):
             tqdm.write("      ⚠️ Reached end of dataset! Ending epoch.")
             break
 
+        # Slicing from np.fromfile is an instant O(1) RAM operation
         raw_batch = np.array(
             train_data_map[current_data_idx:end_idx], dtype=np.int32
         ).reshape(args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1)
@@ -449,73 +342,13 @@ def main():
         )
 
         if opt_step % args.save_interval == 0 or opt_step == max_opt_steps:
-            # 1. RUN VALIDATION FIRST
             val_loss, val_ppl = run_validation(state, model_eval, val_data_map, args)
             tqdm.write(
                 f"      ⭐ Validation Complete | Val Loss: {val_loss:.4f} | Val PPL: {val_ppl:.2f}\n"
             )
 
-            # 2. FORCE SYNC AND GARBAGE COLLECT
             jax.block_until_ready((val_loss, val_ppl))
             release_ram()
-
-            log_runtime_state(f"pre_checkpoint_opt{opt_step}")
-
-            # -----------------------------------------------------------------
-            # EPHEMERAL SAVING (WEIGHTS)
-            # Create, Save, Wait, Close, and DESTROY to release memory + threads
-            # -----------------------------------------------------------------
-            tqdm.write(
-                f"\n      💾 Saving Weights at Opt Step {opt_step} (Data Index: {current_data_idx})..."
-            )
-
-            ckpt_manager_weights = ocp.CheckpointManager(
-                os.path.abspath(ckpt_dir_weights), options=options
-            )
-            save_weights = {
-                "params": state.params,
-                "step": state.step,
-                "data_index": state.data_index,
-            }
-            ckpt_manager_weights.save(
-                opt_step, args=ocp.args.StandardSave(save_weights)
-            )
-            ckpt_manager_weights.wait_until_finished()
-
-            # close() joins/terminates the async writer thread pool; del alone
-            # does not guarantee this, since CheckpointManager relies on an
-            # explicit close() rather than a deterministic __del__.
-            ckpt_manager_weights.close()
-
-            # Annihilate the manager and dictionaries to drop RAM back to 6 GB
-            del save_weights
-            del ckpt_manager_weights
-            release_ram()
-
-            # -----------------------------------------------------------------
-            # EPHEMERAL SAVING (OPTIMIZER)
-            # -----------------------------------------------------------------
-            tqdm.write(f"      💾 Saving Optimizer State (This may take a moment)...")
-            ckpt_manager_opt = ocp.CheckpointManager(
-                os.path.abspath(ckpt_dir_opt), options=options
-            )
-
-            ckpt_manager_opt.save(opt_step, args=ocp.args.StandardSave(state.opt_state))
-            ckpt_manager_opt.wait_until_finished()
-
-            # Same reasoning: close before dropping the reference.
-            ckpt_manager_opt.close()
-
-            # Annihilate the manager
-            del ckpt_manager_opt
-            release_ram()
-
-            # Make sure the live training state itself (not just the val
-            # scalars) is fully synced before we resume the loop.
-            jax.block_until_ready(state)
-
-            log_runtime_state(f"post_checkpoint_opt{opt_step}")
-            just_checkpointed = True
 
             log_dict = {
                 "opt_step": opt_step,
@@ -530,6 +363,25 @@ def main():
                 f.write("\n")
 
     print(f"✅ Training for {args.exp_name} completed successfully.")
+
+    # -----------------------------------------------------------------
+    # ONE-TIME FINAL SAVE
+    # No periodic checkpointing anymore (that was the whole investigation) -
+    # save weights exactly once, here, at the very end of the run.
+    # -----------------------------------------------------------------
+    safe_name = args.exp_name.replace(":", "").replace(" ", "_")
+    final_ckpt_dir = os.path.join(args.output_dir, f"{safe_name}_final_weights")
+    tqdm.write(f"      💾 Saving final weights to {final_ckpt_dir} ...")
+    jax.block_until_ready(state)
+    ocp.StandardCheckpointer().save(
+        os.path.abspath(final_ckpt_dir), state.params, force=True
+    )
+    tqdm.write(f"      ✅ Final weights saved.")
+
+    # Write completion marker for the bash script
+    done_file = os.path.join(args.output_dir, f"{safe_name}_DONE.txt")
+    with open(done_file, "w") as f:
+        f.write("COMPLETED\n")
 
 
 if __name__ == "__main__":

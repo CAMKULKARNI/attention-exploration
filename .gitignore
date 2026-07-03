@@ -4,4 +4,4 @@
 **/results-tpot-all.json
 **/temp.py
 **/*.bin
-**/training_logs
+**/training*
