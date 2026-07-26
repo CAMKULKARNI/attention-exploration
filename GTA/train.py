@@ -89,9 +89,7 @@ def create_train_state(rng, model, args, max_opt_steps):
             return leaf.astype(jnp.bfloat16)
         return leaf
 
-    variables = jax.tree_util.tree_map_with_path(
-        cast_to_bf16_except_layernorm, variables
-    )
+    variables = jax.tree_util.tree_map_with_path(cast_to_bf16_except_layernorm, variables)
 
     schedule = optax.warmup_cosine_decay_schedule(
         init_value=0.0,
@@ -131,24 +129,18 @@ def train_step(state, model, macro_batch, dropout_rng):
                 caches=None,
                 rngs={"dropout": step_rng},
             )
-            loss = optax.softmax_cross_entropy_with_integer_labels(
-                logits=logits, labels=targets
-            )
+            loss = optax.softmax_cross_entropy_with_integer_labels(logits=logits, labels=targets)
             return jnp.mean(loss)
 
         loss, grads = jax.value_and_grad(loss_fn)(state.params)
 
         accum_loss = accum_loss + loss
-        accum_grads = jax.tree_util.tree_map(
-            lambda a, b: a + b.astype(jnp.float32), accum_grads, grads
-        )
+        accum_grads = jax.tree_util.tree_map(lambda a, b: a + b.astype(jnp.float32), accum_grads, grads)
 
         return (rng, accum_loss, accum_grads), None
 
     init_loss = jnp.array(0.0)
-    init_grads = jax.tree_util.tree_map(
-        lambda x: jnp.zeros(x.shape, dtype=jnp.float32), state.params
-    )
+    init_grads = jax.tree_util.tree_map(lambda x: jnp.zeros(x.shape, dtype=jnp.float32), state.params)
     init_carry = (dropout_rng, init_loss, init_grads)
 
     final_carry, _ = jax.lax.scan(body_fn, init_carry, macro_batch)
@@ -156,19 +148,12 @@ def train_step(state, model, macro_batch, dropout_rng):
 
     num_micro_batches = macro_batch.shape[0]
     avg_loss = total_loss / num_micro_batches
-    avg_grads = jax.tree_util.tree_map(
-        lambda x: (x / num_micro_batches).astype(jnp.bfloat16), total_grads
-    )
+    avg_grads = jax.tree_util.tree_map(lambda x: (x / num_micro_batches).astype(jnp.bfloat16), total_grads)
 
     state = state.apply_gradients(grads=avg_grads)
 
     grad_norm = jnp.sqrt(
-        sum(
-            [
-                jnp.sum(jnp.square(x.astype(jnp.float32)))
-                for x in jax.tree_util.tree_leaves(avg_grads)
-            ]
-        )
+        sum([jnp.sum(jnp.square(x.astype(jnp.float32))) for x in jax.tree_util.tree_leaves(avg_grads)])
     )
 
     return state, avg_loss, grad_norm
@@ -185,9 +170,7 @@ def eval_step(state, model, batch):
         current_pos=0,
         caches=None,
     )
-    loss = optax.softmax_cross_entropy_with_integer_labels(
-        logits=logits, labels=targets
-    )
+    loss = optax.softmax_cross_entropy_with_integer_labels(logits=logits, labels=targets)
     return jnp.mean(loss)
 
 
@@ -220,18 +203,36 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
 
-    if not os.path.exists(args.train_data_file) or not os.path.exists(
-        args.val_data_file
-    ):
+    if not os.path.exists(args.train_data_file) or not os.path.exists(args.val_data_file):
         raise FileNotFoundError("Missing .bin files. Run prepare_data.py first.")
+
+    # Establish sanitized tracking file definitions
+    safe_name = args.exp_name.replace(":", "").replace(" ", "_")
+    done_file = os.path.join(args.output_dir, f"{safe_name}_DONE.txt")
+    log_file = os.path.join(args.output_dir, f"{safe_name}_logs.json")
+
+    # Execution Barrier 1: Check for completed full-epoch runs
+    if os.path.exists(done_file):
+        print(
+            f"      [SKIP] Experiment '{args.exp_name}' was successfully complete for one full epoch. Moving to the next experiment."
+        )
+        return
+
+    # Execution Barrier 2: Purge logs from previous broken runs to guarantee fresh artifacts
+    if os.path.exists(log_file):
+        print(
+            f"      [CLEANUP] Incomplete run detected for '{args.exp_name}'. Deleting previous artifacts for a fresh run."
+        )
+        try:
+            os.remove(log_file)
+        except Exception:
+            pass
 
     print("      Loading datasets entirely into RAM...")
     train_data_map = np.fromfile(args.train_data_file, dtype=np.uint16)
     val_data_map = np.fromfile(args.val_data_file, dtype=np.uint16)
 
-    tokens_per_macro_batch = (
-        args.grad_accum_steps * args.micro_batch_size * (args.seq_len + 1)
-    )
+    tokens_per_macro_batch = args.grad_accum_steps * args.micro_batch_size * (args.seq_len + 1)
 
     total_train_tokens = len(train_data_map)
     max_opt_steps = total_train_tokens // tokens_per_macro_batch
@@ -277,9 +278,7 @@ def main():
         (args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1),
         dtype=jnp.int32,
     )
-    dummy_eval_batch = jnp.zeros(
-        (args.micro_batch_size, args.seq_len + 1), dtype=jnp.int32
-    )
+    dummy_eval_batch = jnp.zeros((args.micro_batch_size, args.seq_len + 1), dtype=jnp.int32)
 
     _warmup_state, _, _ = train_step(state, model_train, dummy_macro_batch, dropout_rng)
     del _warmup_state
@@ -293,10 +292,6 @@ def main():
 
     print(f"🚀 [PID: {os.getpid()}] Starting Training: {args.exp_name}")
     print(f"      RSS at training start: {rss_gb():.2f} GiB")
-
-    log_file = os.path.join(
-        args.output_dir, f"{args.exp_name.replace(':', '').replace(' ', '_')}_logs.json"
-    )
 
     pbar = tqdm(
         range(start_opt_step + 1, max_opt_steps + 1),
@@ -312,9 +307,9 @@ def main():
             break
 
         # Slicing from np.fromfile is an instant O(1) RAM operation
-        raw_batch = np.array(
-            train_data_map[current_data_idx:end_idx], dtype=np.int32
-        ).reshape(args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1)
+        raw_batch = np.array(train_data_map[current_data_idx:end_idx], dtype=np.int32).reshape(
+            args.grad_accum_steps, args.micro_batch_size, args.seq_len + 1
+        )
         macro_batch = jnp.asarray(raw_batch)
         del raw_batch
 
@@ -323,9 +318,7 @@ def main():
 
         dropout_rng, step_dropout_rng = jax.random.split(dropout_rng)
 
-        state, loss, grad_norm = train_step(
-            state, model_train, macro_batch, step_dropout_rng
-        )
+        state, loss, grad_norm = train_step(state, model_train, macro_batch, step_dropout_rng)
         del macro_batch
 
         avg_train_loss = float(loss)
@@ -343,9 +336,7 @@ def main():
 
         if opt_step % args.save_interval == 0 or opt_step == max_opt_steps:
             val_loss, val_ppl = run_validation(state, model_eval, val_data_map, args)
-            tqdm.write(
-                f"      ⭐ Validation Complete | Val Loss: {val_loss:.4f} | Val PPL: {val_ppl:.2f}\n"
-            )
+            tqdm.write(f"      ⭐ Validation Complete | Val Loss: {val_loss:.4f} | Val PPL: {val_ppl:.2f}\n")
 
             jax.block_until_ready((val_loss, val_ppl))
             release_ram()
@@ -366,20 +357,26 @@ def main():
 
     # -----------------------------------------------------------------
     # ONE-TIME FINAL SAVE
-    # No periodic checkpointing anymore (that was the whole investigation) -
-    # save weights exactly once, here, at the very end of the run.
+    # Fixed Thread Shutdown Bug: Utilizing CheckpointManager to explicitly
+    # block the interpreter and join Orbax futures before Python exits.
     # -----------------------------------------------------------------
-    safe_name = args.exp_name.replace(":", "").replace(" ", "_")
     final_ckpt_dir = os.path.join(args.output_dir, f"{safe_name}_final_weights")
     tqdm.write(f"      💾 Saving final weights to {final_ckpt_dir} ...")
     jax.block_until_ready(state)
-    ocp.StandardCheckpointer().save(
-        os.path.abspath(final_ckpt_dir), state.params, force=True
-    )
+
+    options = ocp.CheckpointManagerOptions(max_to_keep=1, create=True)
+    final_ckpt_manager = ocp.CheckpointManager(os.path.abspath(final_ckpt_dir), options=options)
+
+    save_weights = {"params": state.params}
+    final_ckpt_manager.save(max_opt_steps, args=ocp.args.StandardSave(save_weights))
+
+    # These two lines prevent the runtime shutdown crash!
+    final_ckpt_manager.wait_until_finished()
+    final_ckpt_manager.close()
+
     tqdm.write(f"      ✅ Final weights saved.")
 
     # Write completion marker for the bash script
-    done_file = os.path.join(args.output_dir, f"{safe_name}_DONE.txt")
     with open(done_file, "w") as f:
         f.write("COMPLETED\n")
 

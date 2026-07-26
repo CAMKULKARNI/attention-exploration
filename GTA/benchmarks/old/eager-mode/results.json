@@ -1,0 +1,1202 @@
+[
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 2048,
+        "params": 382043136,
+        "vram": 1968.842797279358,
+        "ttft": 1.5729388820000167,
+        "tpot": 1.0923618138199982
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 360004608,
+        "vram": 1922.805443763733,
+        "ttft": 1.3735237939999934,
+        "tpot": 1.0569869061900068
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 315927552,
+        "vram": 1830.730736732483,
+        "ttft": 1.1566918129999522,
+        "tpot": 0.9305664121500286
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 354827264,
+        "vram": 1072.9855852127075,
+        "ttft": 0.7426620169999296,
+        "tpot": 0.563438004379991
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 360004608,
+        "vram": 862.0232200622559,
+        "ttft": 1.3275829460003479,
+        "tpot": 1.0580460719700113
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 4096,
+        "params": 382043136,
+        "vram": 5544.866234779358,
+        "ttft": 3.5644585430000006,
+        "tpot": 1.1416409311500046
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 360004608,
+        "vram": 5494.828881263733,
+        "ttft": 3.2818785439999374,
+        "tpot": 1.0558302662099959
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 328510464,
+        "vram": 1922.7526903152466,
+        "ttft": 0.9499536579996857,
+        "tpot": 0.6917383839500053
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 354302976,
+        "vram": 919.2111778259277,
+        "ttft": 0.6591432780001014,
+        "tpot": 0.6470765271200025
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 328510464,
+        "vram": 978.7409715652466,
+        "ttft": 0.66219254500038,
+        "tpot": 0.6487963246399886
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 315927552,
+        "vram": 5394.754174232483,
+        "ttft": 2.9034468680001737,
+        "tpot": 0.9469574388199817
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 360004608,
+        "vram": 1012.7937250137329,
+        "ttft": 1.3791984749996118,
+        "tpot": 1.0789036948800186
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 374684672,
+        "vram": 1074.8193407058716,
+        "ttft": 0.8644969120000496,
+        "tpot": 0.7504583650999939
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 328510464,
+        "vram": 821.9704666137695,
+        "ttft": 0.7493103080000765,
+        "tpot": 0.6744817684299869
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 374684672,
+        "vram": 2026.8310594558716,
+        "ttft": 1.0993621110001186,
+        "tpot": 0.7938381442700484
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 374684672,
+        "vram": 918.0488357543945,
+        "ttft": 0.7739531630004421,
+        "tpot": 0.7468267675200514
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 315927552,
+        "vram": 924.7190179824829,
+        "ttft": 1.2149559219997172,
+        "tpot": 0.9112442064400057
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 374684672,
+        "vram": 5706.854496955872,
+        "ttft": 4.538899423999283,
+        "tpot": 0.7690488874699531
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 328510464,
+        "vram": 5586.776127815247,
+        "ttft": 3.5762931029994434,
+        "tpot": 0.6884984307900414
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 355875840,
+        "vram": 2055.0012102127075,
+        "ttft": 0.8535461699993903,
+        "tpot": 0.5767178224599593
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 357972992,
+        "vram": 5771.0324602127075,
+        "ttft": 2.563842957999441,
+        "tpot": 0.5508108726800037
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 512,
+        "params": 382043136,
+        "vram": 906.0605735778809,
+        "ttft": 1.256717825999658,
+        "tpot": 1.0976326832600807
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 315927552,
+        "vram": 773.9485130310059,
+        "ttft": 0.9977083860003404,
+        "tpot": 0.8884706441399977
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 1024,
+        "params": 382043136,
+        "vram": 1056.831078529358,
+        "ttft": 1.4956460370003697,
+        "tpot": 1.1210283746700225
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 328510464,
+        "vram": 821.9704666137695,
+        "ttft": 0.6707876020000185,
+        "tpot": 0.6578980034599681
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 315927552,
+        "vram": 924.7190179824829,
+        "ttft": 1.1505361050003557,
+        "tpot": 0.8858497084400005
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 374684672,
+        "vram": 5706.854496955872,
+        "ttft": 4.496534902000349,
+        "tpot": 0.7565814895599852
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 354302976,
+        "vram": 919.2111778259277,
+        "ttft": 0.7197448940005415,
+        "tpot": 0.5611290011300025
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 2048,
+        "params": 382043136,
+        "vram": 1968.842797279358,
+        "ttft": 1.4527787590004664,
+        "tpot": 1.091559900410084
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 315927552,
+        "vram": 1830.730736732483,
+        "ttft": 1.3277218099992751,
+        "tpot": 0.9126073681300568
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 374684672,
+        "vram": 1074.8193407058716,
+        "ttft": 0.8531739879999805,
+        "tpot": 0.751092817259987
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 360004608,
+        "vram": 5494.828881263733,
+        "ttft": 3.2849870400004875,
+        "tpot": 1.0645502580699757
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 328510464,
+        "vram": 1922.7526903152466,
+        "ttft": 0.9465853740002785,
+        "tpot": 0.6947817728799418
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 1024,
+        "params": 382043136,
+        "vram": 1056.831078529358,
+        "ttft": 1.2249797060003402,
+        "tpot": 1.1162736043899621
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 360004608,
+        "vram": 1922.805443763733,
+        "ttft": 1.6218088489995353,
+        "tpot": 1.0792854564099799
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 354827264,
+        "vram": 1072.9855852127075,
+        "ttft": 0.7229370149998431,
+        "tpot": 0.5881163269900298
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 360004608,
+        "vram": 1012.7937250137329,
+        "ttft": 1.1594184499999756,
+        "tpot": 1.0456868445600138
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 357972992,
+        "vram": 5771.0324602127075,
+        "ttft": 2.564251200000399,
+        "tpot": 0.5856428852200588
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 360004608,
+        "vram": 862.0232200622559,
+        "ttft": 1.207811734999268,
+        "tpot": 1.056343491989992
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 4096,
+        "params": 382043136,
+        "vram": 5544.866234779358,
+        "ttft": 3.5774352560001716,
+        "tpot": 1.1620923287100777
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 328510464,
+        "vram": 5586.776127815247,
+        "ttft": 3.6342387389995565,
+        "tpot": 0.6797853045499324
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 374684672,
+        "vram": 918.0488357543945,
+        "ttft": 0.7807954790005169,
+        "tpot": 0.7823770657801106
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 355875840,
+        "vram": 2055.0012102127075,
+        "ttft": 0.8444536480001261,
+        "tpot": 0.5731798758599507
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 315927552,
+        "vram": 773.9485130310059,
+        "ttft": 1.1020023429991852,
+        "tpot": 0.9457266151600561
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 512,
+        "params": 382043136,
+        "vram": 906.0605735778809,
+        "ttft": 1.4352193449994957,
+        "tpot": 1.135302858419982
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 328510464,
+        "vram": 978.7409715652466,
+        "ttft": 0.6509418790010386,
+        "tpot": 0.6732237250000072
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 374684672,
+        "vram": 2026.8310594558716,
+        "ttft": 1.126712064999083,
+        "tpot": 0.8076484084799995
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 315927552,
+        "vram": 5394.754174232483,
+        "ttft": 2.8851796920007473,
+        "tpot": 0.9489505330100837
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 2048,
+        "params": 382043136,
+        "vram": 1968.842797279358,
+        "ttft": 1.3902715160002117,
+        "tpot": 1.1491287858100805
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 315927552,
+        "vram": 773.9485130310059,
+        "ttft": 1.0270041639996634,
+        "tpot": 0.9412402562500211
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 328510464,
+        "vram": 1922.7526903152466,
+        "ttft": 0.9503689850007504,
+        "tpot": 0.6945129677499426
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 328510464,
+        "vram": 821.9704666137695,
+        "ttft": 0.646257536000121,
+        "tpot": 0.6641014486299901
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 357972992,
+        "vram": 5771.0324602127075,
+        "ttft": 2.581213994999416,
+        "tpot": 0.5836333385000216
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 315927552,
+        "vram": 1830.730736732483,
+        "ttft": 1.269114549000733,
+        "tpot": 0.9768841370499649
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 374684672,
+        "vram": 2026.8310594558716,
+        "ttft": 1.1148678079989622,
+        "tpot": 0.8103656104000038
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 512,
+        "params": 382043136,
+        "vram": 906.0605735778809,
+        "ttft": 1.3630963810010144,
+        "tpot": 1.191490774909871
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 360004608,
+        "vram": 5494.828881263733,
+        "ttft": 3.3059527549994527,
+        "tpot": 1.1075034508101271
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 360004608,
+        "vram": 862.0232200622559,
+        "ttft": 1.2435875839983055,
+        "tpot": 1.095928744379944
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 354827264,
+        "vram": 1072.9855852127075,
+        "ttft": 0.6871113520010113,
+        "tpot": 0.5851118055599727
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 360004608,
+        "vram": 1922.805443763733,
+        "ttft": 1.4071953759994358,
+        "tpot": 1.090703720529964
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 360004608,
+        "vram": 1012.7937250137329,
+        "ttft": 1.3082884319992445,
+        "tpot": 1.0750403318099233
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 4096,
+        "params": 382043136,
+        "vram": 5544.866234779358,
+        "ttft": 3.6166159189997416,
+        "tpot": 1.17425435362009
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 315927552,
+        "vram": 5394.754174232483,
+        "ttft": 2.861453083000015,
+        "tpot": 0.987063394079978
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 354302976,
+        "vram": 919.2111778259277,
+        "ttft": 0.7178738010006782,
+        "tpot": 0.5830938101599168
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 374684672,
+        "vram": 5706.854496955872,
+        "ttft": 4.536101391000557,
+        "tpot": 0.8211123699498967
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 328510464,
+        "vram": 978.7409715652466,
+        "ttft": 0.7687547750010708,
+        "tpot": 0.7122249030900821
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 328510464,
+        "vram": 5586.776127815247,
+        "ttft": 3.6253348410009494,
+        "tpot": 0.7236626899801013
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 315927552,
+        "vram": 924.7190179824829,
+        "ttft": 1.1977859260005062,
+        "tpot": 0.9614712883799439
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 374684672,
+        "vram": 1074.8193407058716,
+        "ttft": 0.9237612010001612,
+        "tpot": 0.8022595227099737
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 374684672,
+        "vram": 918.0488357543945,
+        "ttft": 0.7771872440007428,
+        "tpot": 0.8064759551199131
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 355875840,
+        "vram": 2055.0012102127075,
+        "ttft": 0.859937629000342,
+        "tpot": 0.5979857288701169
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 1024,
+        "params": 382043136,
+        "vram": 1056.831078529358,
+        "ttft": 1.3751653520012042,
+        "tpot": 1.171315891369868
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 357972992,
+        "vram": 5771.0324602127075,
+        "ttft": 2.6221558739998727,
+        "tpot": 0.584549898290079
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 374684672,
+        "vram": 5706.854496955872,
+        "ttft": 4.578884894999646,
+        "tpot": 0.8005751269400208
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 360004608,
+        "vram": 5494.828881263733,
+        "ttft": 3.332075382999392,
+        "tpot": 1.1632871994701055
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 374684672,
+        "vram": 1074.8193407058716,
+        "ttft": 0.8630840710011398,
+        "tpot": 0.8016091539398803
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 328510464,
+        "vram": 978.7409715652466,
+        "ttft": 0.6755251430004137,
+        "tpot": 0.7007600392101085
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 328510464,
+        "vram": 1922.7526903152466,
+        "ttft": 1.0399386450008024,
+        "tpot": 0.7064603152099699
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 360004608,
+        "vram": 862.0232200622559,
+        "ttft": 1.2039875209993625,
+        "tpot": 1.115228382940186
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 4096,
+        "params": 382043136,
+        "vram": 5544.866234779358,
+        "ttft": 3.6786482549996435,
+        "tpot": 1.186434605419945
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 512,
+        "params": 382043136,
+        "vram": 906.0605735778809,
+        "ttft": 1.3529248550003103,
+        "tpot": 1.2344240253799945
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 315927552,
+        "vram": 924.7190179824829,
+        "ttft": 1.1640659669992601,
+        "tpot": 0.9593156570201063
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 360004608,
+        "vram": 1012.7937250137329,
+        "ttft": 1.2642708659986965,
+        "tpot": 1.0977957388001232
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 374684672,
+        "vram": 918.0488357543945,
+        "ttft": 0.7647188589980942,
+        "tpot": 0.8048015827699783
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 374684672,
+        "vram": 2026.8310594558716,
+        "ttft": 1.1291267259985034,
+        "tpot": 0.8300179206199028
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 1024,
+        "params": 382043136,
+        "vram": 1056.831078529358,
+        "ttft": 1.273261199999979,
+        "tpot": 1.1553839846302072
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 328510464,
+        "vram": 5586.776127815247,
+        "ttft": 3.572464423999918,
+        "tpot": 0.7210836542601828
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 360004608,
+        "vram": 1922.805443763733,
+        "ttft": 1.4447607289985172,
+        "tpot": 1.0654764635300307
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 315927552,
+        "vram": 773.9485130310059,
+        "ttft": 1.0512056020015734,
+        "tpot": 0.9952167206101876
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 315927552,
+        "vram": 1830.730736732483,
+        "ttft": 1.3405163630013703,
+        "tpot": 0.970679509199872
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 354302976,
+        "vram": 919.2111778259277,
+        "ttft": 0.7904788900013955,
+        "tpot": 0.6004420953698718
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 328510464,
+        "vram": 821.9704666137695,
+        "ttft": 0.7971687579993159,
+        "tpot": 0.6882428960999823
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 354827264,
+        "vram": 1072.9855852127075,
+        "ttft": 0.8741617919986311,
+        "tpot": 0.5788545519399849
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 2048,
+        "params": 382043136,
+        "vram": 1968.842797279358,
+        "ttft": 1.4563301510024758,
+        "tpot": 1.176254787759899
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 355875840,
+        "vram": 2055.0012102127075,
+        "ttft": 0.8830401989980601,
+        "tpot": 0.5842573963701579
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 315927552,
+        "vram": 5394.754174232483,
+        "ttft": 2.9491395949989965,
+        "tpot": 0.9648749869700259
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 4096,
+        "params": 382043136,
+        "vram": 5544.866234779358,
+        "ttft": 3.6046998199999507,
+        "tpot": 1.2758146962598766
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 328510464,
+        "vram": 1922.7526903152466,
+        "ttft": 0.9860115720002796,
+        "tpot": 0.7001459550501022
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 374684672,
+        "vram": 5706.854496955872,
+        "ttft": 4.600252455002192,
+        "tpot": 0.8237692944598893
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 328510464,
+        "vram": 978.7409715652466,
+        "ttft": 1.125523405000422,
+        "tpot": 0.7191501951100873
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 315927552,
+        "vram": 5394.754174232483,
+        "ttft": 2.9147387279990653,
+        "tpot": 0.9656038807897858
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 315927552,
+        "vram": 773.9485130310059,
+        "ttft": 1.0288478080001369,
+        "tpot": 0.9309946065199983
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 354302976,
+        "vram": 919.2111778259277,
+        "ttft": 0.6914941969989741,
+        "tpot": 0.6111707590800506
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 2048,
+        "params": 382043136,
+        "vram": 1968.842797279358,
+        "ttft": 1.5003335799992783,
+        "tpot": 1.1879357524999068
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 374684672,
+        "vram": 918.0488357543945,
+        "ttft": 0.8398200369992992,
+        "tpot": 0.7528016781798215
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 315927552,
+        "vram": 1830.730736732483,
+        "ttft": 1.149518325997633,
+        "tpot": 0.949525940229978
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 360004608,
+        "vram": 1012.7937250137329,
+        "ttft": 1.2070398649993876,
+        "tpot": 1.1363118655498328
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 328510464,
+        "vram": 5586.776127815247,
+        "ttft": 3.6318185060008545,
+        "tpot": 0.7174789637597496
+    },
+    {
+        "exp_name": "Exp 3: GTA + ALiBi (24 Layers)",
+        "attn_type": "gta",
+        "layers": 24,
+        "prompt_len": 512,
+        "params": 328510464,
+        "vram": 821.9704666137695,
+        "ttft": 0.7504103899991605,
+        "tpot": 0.7086155111901826
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 354827264,
+        "vram": 1072.9855852127075,
+        "ttft": 0.7260412850009743,
+        "tpot": 0.6238674285400339
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 360004608,
+        "vram": 1922.805443763733,
+        "ttft": 1.4962388050007576,
+        "tpot": 1.1234493611699872
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 4096,
+        "params": 357972992,
+        "vram": 5771.0324602127075,
+        "ttft": 2.6510775339993415,
+        "tpot": 0.5959246320399688
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 512,
+        "params": 382043136,
+        "vram": 906.0605735778809,
+        "ttft": 1.3658055989981222,
+        "tpot": 1.1644768459997794
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 1024,
+        "params": 374684672,
+        "vram": 1074.8193407058716,
+        "ttft": 0.7849811980013328,
+        "tpot": 0.7938572837400716
+    },
+    {
+        "exp_name": "Exp 5: GQA + RoPE (30 Layers)",
+        "attn_type": "gqa",
+        "layers": 30,
+        "prompt_len": 1024,
+        "params": 382043136,
+        "vram": 1056.831078529358,
+        "ttft": 1.5264983090019086,
+        "tpot": 1.1648314324501552
+    },
+    {
+        "exp_name": "Exp 2: GQA + RoPE (24 Layers)",
+        "attn_type": "gqa",
+        "layers": 24,
+        "prompt_len": 1024,
+        "params": 315927552,
+        "vram": 924.7190179824829,
+        "ttft": 1.1094124720002583,
+        "tpot": 0.9923443487600525
+    },
+    {
+        "exp_name": "Exp 6: GTA + ALiBi (28 Layers)",
+        "attn_type": "gta",
+        "layers": 28,
+        "prompt_len": 2048,
+        "params": 374684672,
+        "vram": 2026.8310594558716,
+        "ttft": 1.145389224999235,
+        "tpot": 0.8052973881801517
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 4096,
+        "params": 360004608,
+        "vram": 5494.828881263733,
+        "ttft": 3.4518148860006477,
+        "tpot": 1.1141649748699274
+    },
+    {
+        "exp_name": "Exp 4: GQA + RoPE (28 Layers)",
+        "attn_type": "gqa",
+        "layers": 28,
+        "prompt_len": 512,
+        "params": 360004608,
+        "vram": 862.0232200622559,
+        "ttft": 1.2151044130005175,
+        "tpot": 1.157127301930159
+    },
+    {
+        "exp_name": "Exp 1: Vanilla MHA (24 Layers)",
+        "attn_type": "mha",
+        "layers": 24,
+        "prompt_len": 2048,
+        "params": 355875840,
+        "vram": 2055.0012102127075,
+        "ttft": 0.8683702840025944,
+        "tpot": 0.6125254832498104
+    }
+]

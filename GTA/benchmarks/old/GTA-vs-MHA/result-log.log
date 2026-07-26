@@ -1,0 +1,1041 @@
+==========================================
+    STARTING 5-RUN MEDIAN BENCHMARK
+==========================================
+==========================================
+    STARTING RUN 1 OF 5
+==========================================
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198680.238240   24569 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198683.131433   24569 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 24569] Running Exp 1: Baseline Vanilla (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 928.39 MB | TTFT: 0.7865s | TPOT: 0.6957s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198779.027488   25878 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198781.864261   25878 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 25878] Running Exp 1: Baseline Vanilla (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 1177.15 MB | TTFT: 0.6943s | TPOT: 0.6330s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198873.180902   27113 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198876.082217   27113 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 27113] Running Exp 1: Baseline Vanilla (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 2255.16 MB | TTFT: 0.7991s | TPOT: 0.6806s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198971.893042   28379 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780198972.249312   28379 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 28379] Running Exp 1: Baseline Vanilla (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 6163.17 MB | TTFT: 2.2517s | TPOT: 0.6393s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199067.239027   29623 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199070.048598   29623 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 29623] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 832.15 MB | TTFT: 0.7393s | TPOT: 0.6216s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199158.790043   30837 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199161.556216   30837 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 30837] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 1032.92 MB | TTFT: 0.6834s | TPOT: 0.6207s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199247.370362   32037 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199250.067737   32037 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 32037] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 2014.92 MB | TTFT: 0.8113s | TPOT: 0.6473s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199341.305867   33229 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199343.944874   33229 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 33229] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 5730.93 MB | TTFT: 1.9268s | TPOT: 0.5778s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199430.077934   34402 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199432.727288   34402 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 34402] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 880.21 MB | TTFT: 0.7224s | TPOT: 0.6381s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199522.971746   35625 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199523.070462   35625 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 35625] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 1084.97 MB | TTFT: 0.8179s | TPOT: 0.7057s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199620.252882   36883 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199622.819064   36883 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 36883] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 2074.98 MB | TTFT: 0.8026s | TPOT: 0.7442s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199722.633415   38192 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199725.159394   38192 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 38192] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 5806.99 MB | TTFT: 2.0480s | TPOT: 0.6605s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199820.658832   39436 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199823.324915   39436 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 39436] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 928.26 MB | TTFT: 0.8156s | TPOT: 0.7890s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199928.091099   40799 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780199930.871667   40799 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 40799] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 1137.03 MB | TTFT: 0.7737s | TPOT: 0.6864s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200025.826194   42091 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200028.466899   42091 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 42091] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 2135.03 MB | TTFT: 0.9533s | TPOT: 0.8071s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200136.546181   43477 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200140.252115   43477 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 43477] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 5883.04 MB | TTFT: 2.3901s | TPOT: 0.7161s
+💤 Sleeping for 5 seconds...
+==========================================
+    STARTING RUN 2 OF 5
+==========================================
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200242.609878   44852 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200245.345371   44852 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 44852] Running Exp 1: Baseline Vanilla (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 928.39 MB | TTFT: 0.6839s | TPOT: 0.7107s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200344.374981   46117 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200347.290603   46117 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 46117] Running Exp 1: Baseline Vanilla (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 1177.15 MB | TTFT: 0.6926s | TPOT: 0.6928s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200441.221370   47373 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200444.215962   47373 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 47373] Running Exp 1: Baseline Vanilla (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 2255.16 MB | TTFT: 0.8163s | TPOT: 0.6598s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200537.549106   48620 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200540.371301   48620 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 48620] Running Exp 1: Baseline Vanilla (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 6163.17 MB | TTFT: 1.9746s | TPOT: 0.6656s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200635.054772   49894 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200637.855912   49894 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 49894] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 832.15 MB | TTFT: 0.6321s | TPOT: 0.6166s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200725.769707   51062 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200728.498590   51062 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 51062] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 1032.92 MB | TTFT: 0.7739s | TPOT: 0.6399s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200819.156180   52283 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200819.397807   52283 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 52283] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 2014.92 MB | TTFT: 0.8445s | TPOT: 0.6303s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200909.659676   53491 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780200912.408737   53491 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 53491] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 5730.93 MB | TTFT: 1.9154s | TPOT: 0.6240s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201003.082790   54685 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201005.848786   54685 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 54685] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 880.21 MB | TTFT: 0.8091s | TPOT: 0.6854s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201097.814049   55927 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201100.709320   55927 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 55927] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 1084.97 MB | TTFT: 0.6999s | TPOT: 0.7186s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201200.197036   57213 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201203.111455   57213 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 57213] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 2074.98 MB | TTFT: 0.8059s | TPOT: 0.6740s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201294.387683   58450 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201297.084092   58450 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 58450] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 5806.99 MB | TTFT: 2.0830s | TPOT: 0.6661s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201394.059136   59725 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201394.279188   59725 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 59725] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 928.26 MB | TTFT: 0.8476s | TPOT: 0.8025s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201504.032078   61102 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201504.162403   61102 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 61102] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 1137.03 MB | TTFT: 0.9029s | TPOT: 0.7412s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201607.050217   62399 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201609.838618   62399 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 62399] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 2135.03 MB | TTFT: 0.9229s | TPOT: 0.7936s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201715.347383   63760 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201718.178295   63760 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 63760] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 5883.04 MB | TTFT: 2.2831s | TPOT: 0.7187s
+💤 Sleeping for 5 seconds...
+==========================================
+    STARTING RUN 3 OF 5
+==========================================
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201819.238950   65092 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201822.151616   65092 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 65092] Running Exp 1: Baseline Vanilla (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 928.39 MB | TTFT: 0.7169s | TPOT: 0.7127s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201917.822367   66369 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780201920.547637   66369 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 66369] Running Exp 1: Baseline Vanilla (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 1177.15 MB | TTFT: 0.7113s | TPOT: 0.7006s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202018.128716   67643 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202020.829208   67643 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 67643] Running Exp 1: Baseline Vanilla (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 2255.16 MB | TTFT: 0.8216s | TPOT: 0.6780s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202112.789278   68907 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202115.589913   68907 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 68907] Running Exp 1: Baseline Vanilla (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 6163.17 MB | TTFT: 2.0266s | TPOT: 0.6936s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202214.719649   70191 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202217.604627   70191 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 70191] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 832.15 MB | TTFT: 0.6360s | TPOT: 0.6589s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202307.189323   71397 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202310.013911   71397 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 71397] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 1032.92 MB | TTFT: 0.6835s | TPOT: 0.6457s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202400.665465   72622 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202403.703513   72622 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 72622] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 2014.92 MB | TTFT: 0.8197s | TPOT: 0.6790s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202495.579879   73868 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202498.440089   73868 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 73868] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 5730.93 MB | TTFT: 1.8746s | TPOT: 0.6265s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202589.425874   75065 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202592.235606   75065 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 75065] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 880.21 MB | TTFT: 0.6685s | TPOT: 0.6736s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202684.031777   76317 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202686.937763   76317 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 76317] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 1084.97 MB | TTFT: 0.6796s | TPOT: 0.6796s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202781.781102   77571 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202784.626690   77571 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 77571] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 2074.98 MB | TTFT: 0.9053s | TPOT: 0.6851s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202877.897600   78833 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202880.804744   78833 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 78833] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 5806.99 MB | TTFT: 2.0468s | TPOT: 0.6835s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202978.551063   80087 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780202981.324745   80087 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 80087] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 928.26 MB | TTFT: 0.7614s | TPOT: 0.8002s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203086.416726   81448 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203089.137956   81448 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 81448] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 1137.03 MB | TTFT: 0.9866s | TPOT: 0.7398s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203188.608498   82765 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203191.329114   82765 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 82765] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 2135.03 MB | TTFT: 0.8794s | TPOT: 0.7713s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203294.231360   84107 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203296.968825   84107 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 84107] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 5883.04 MB | TTFT: 2.1752s | TPOT: 0.7266s
+💤 Sleeping for 5 seconds...
+==========================================
+    STARTING RUN 4 OF 5
+==========================================
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203398.077651   85421 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203400.769259   85421 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 85421] Running Exp 1: Baseline Vanilla (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 928.39 MB | TTFT: 0.6942s | TPOT: 0.6990s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203498.726740   86705 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203502.550495   86705 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 86705] Running Exp 1: Baseline Vanilla (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 1177.15 MB | TTFT: 0.7321s | TPOT: 0.6827s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203596.633546   88015 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203599.545503   88015 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 88015] Running Exp 1: Baseline Vanilla (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 2255.16 MB | TTFT: 0.7713s | TPOT: 0.6976s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203696.833336   89293 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203699.558086   89293 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 89293] Running Exp 1: Baseline Vanilla (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 6163.17 MB | TTFT: 2.0409s | TPOT: 0.7080s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203797.214133   90550 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203799.855131   90550 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 90550] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 832.15 MB | TTFT: 0.8259s | TPOT: 0.6511s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203891.119326   91778 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203891.176714   91778 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 91778] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 1032.92 MB | TTFT: 0.6518s | TPOT: 0.6696s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203984.631425   93020 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780203987.336634   93020 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 93020] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 2014.92 MB | TTFT: 0.7925s | TPOT: 0.6839s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204081.898698   94261 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204081.874158   94261 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 94261] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 5730.93 MB | TTFT: 1.8979s | TPOT: 0.6511s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204174.812084   95475 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204177.404082   95475 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 95475] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 880.21 MB | TTFT: 0.7111s | TPOT: 0.6795s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204272.597075   96738 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204275.252597   96738 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 96738] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 1084.97 MB | TTFT: 0.7625s | TPOT: 0.7059s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204369.199063   97991 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204371.772098   97991 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 97991] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 2074.98 MB | TTFT: 0.8186s | TPOT: 0.6819s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204465.822903   99232 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204465.726201   99232 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 99232] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 5806.99 MB | TTFT: 2.0961s | TPOT: 0.7023s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204564.876716  100500 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204567.593285  100500 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 100500] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 928.26 MB | TTFT: 0.8080s | TPOT: 0.7575s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204670.386770  101840 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204673.076206  101840 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 101840] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 1137.03 MB | TTFT: 0.7512s | TPOT: 0.7605s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204774.167288  103164 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204776.738104  103164 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 103164] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 2135.03 MB | TTFT: 0.8660s | TPOT: 0.7782s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204879.041537  104506 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204881.812089  104506 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 104506] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 5883.04 MB | TTFT: 2.2456s | TPOT: 0.7009s
+💤 Sleeping for 5 seconds...
+==========================================
+    STARTING RUN 5 OF 5
+==========================================
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204982.137933  105796 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780204984.895025  105796 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 105796] Running Exp 1: Baseline Vanilla (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 928.39 MB | TTFT: 0.7140s | TPOT: 0.7033s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205079.458187  107071 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205082.224045  107071 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 107071] Running Exp 1: Baseline Vanilla (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 1177.15 MB | TTFT: 0.7274s | TPOT: 0.7139s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205178.211199  108357 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205180.873331  108357 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 108357] Running Exp 1: Baseline Vanilla (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 2255.16 MB | TTFT: 0.7832s | TPOT: 0.6818s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205277.383555  109580 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205280.035052  109580 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 109580] Running Exp 1: Baseline Vanilla (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 357.87M | VRAM: 6163.17 MB | TTFT: 2.0010s | TPOT: 0.6814s
+💤 Sleeping for 5 seconds to clear OS/VRAM pager...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205374.711160  110829 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205377.443872  110829 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 110829] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 832.15 MB | TTFT: 0.6715s | TPOT: 0.6820s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205471.601709  112070 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205474.398029  112070 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 112070] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 1032.92 MB | TTFT: 0.6685s | TPOT: 0.6458s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205563.759136  113297 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205566.580050  113297 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 113297] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 2014.92 MB | TTFT: 0.7555s | TPOT: 0.6188s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205653.973718  114461 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205656.684859  114461 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 114461] Running Exp 2: Tied KV Iso-Layer (24 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 332.70M | VRAM: 5730.93 MB | TTFT: 1.9238s | TPOT: 0.6235s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205746.704989  115672 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205749.409650  115672 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 115672] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 880.21 MB | TTFT: 0.8792s | TPOT: 0.7468s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205847.421990  116976 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205850.236152  116976 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 116976] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 1084.97 MB | TTFT: 0.7275s | TPOT: 0.7461s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205948.831242  118276 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780205951.631843  118276 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 118276] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 2074.98 MB | TTFT: 0.9114s | TPOT: 0.7138s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206049.528226  119543 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206052.263586  119543 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 119543] Running Exp 3: Tied KV Iso-Param (26 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 355.79M | VRAM: 5806.99 MB | TTFT: 2.0736s | TPOT: 0.7036s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206148.179604  120787 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206150.988342  120787 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 120787] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 512...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 928.26 MB | TTFT: 0.7534s | TPOT: 0.7849s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206253.930626  122136 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206256.703071  122136 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 122136] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 1024...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 1137.03 MB | TTFT: 0.7683s | TPOT: 0.7515s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206356.614125  123458 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206359.574157  123458 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 123458] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 2048...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 2135.03 MB | TTFT: 0.9433s | TPOT: 0.7472s
+💤 Sleeping for 5 seconds...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206464.693541  124796 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1780206464.799829  124796 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/anaconda3/envs/tensorflow-gpu/lib/python3.12/site-packages/keras/src/ops/nn.py:947: UserWarning: You are using a softmax over axis -1 of a tensor of shape (1, 16, 1, 1). This axis has size 1. The softmax operation will always return the value 1, which is likely not what you intended. Did you mean to use a sigmoid instead?
+  warnings.warn(
+
+🚀 [PID: 124796] Running Exp 4: Tied KV Iso-Param (28 Layers) at Length 4096...
+      Warming up GPU kernels (Prefill + 5 Decode steps)...
+      Params: 378.88M | VRAM: 5883.04 MB | TTFT: 2.2330s | TPOT: 0.7244s
+💤 Sleeping for 5 seconds...
+==========================================
+    ALL PROFILES COMPLETE. PLOTTING...
+==========================================
+Generating median-aggregated plots...
+🎉 Complete! Check the .png files.

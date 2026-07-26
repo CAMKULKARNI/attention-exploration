@@ -4,4 +4,6 @@
 **/results-tpot-all.json
 **/temp.py
 **/*.bin
-**/training*
+training_logs/
+training_report.md
+./GTA/benchmarks/old

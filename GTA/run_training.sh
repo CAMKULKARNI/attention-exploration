@@ -8,10 +8,11 @@ OUTPUT_DIR="./training_logs"
 
 mkdir -p "$OUTPUT_DIR"
 
-EXPS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14)
+# Now looping all the way through the 29 architectures
+EXPS=($(seq 1 29))
 
 echo "=========================================="
-echo "    STARTING ARCHITECTURE TRAINING SWEEP"
+echo "    STARTING FULL CROSS-PE ABLATION SWEEP"
 echo "=========================================="
 
 for EXP_ID in "${EXPS[@]}"; do
@@ -30,6 +31,21 @@ for EXP_ID in "${EXPS[@]}"; do
         12) NAME="Exp_12_GTA_ALiBi_24L"; ATTN="gta"; LAYERS=24 ;;
         13) NAME="Exp_13_GTA_ALiBi_28L"; ATTN="gta"; LAYERS=28 ;;
         14) NAME="Exp_14_GTA_ALiBi_30L"; ATTN="gta"; LAYERS=30 ;;
+        15) NAME="Exp_15_MHA_ALiBi_24L"; ATTN="mha_alibi"; LAYERS=24 ;;
+        16) NAME="Exp_16_MHA_ALiBi_28L"; ATTN="mha_alibi"; LAYERS=28 ;;
+        17) NAME="Exp_17_MHA_ALiBi_30L"; ATTN="mha_alibi"; LAYERS=30 ;;
+        18) NAME="Exp_18_GQA_ALiBi_24L"; ATTN="gqa_alibi"; LAYERS=24 ;;
+        19) NAME="Exp_19_GQA_ALiBi_28L"; ATTN="gqa_alibi"; LAYERS=28 ;;
+        20) NAME="Exp_20_GQA_ALiBi_30L"; ATTN="gqa_alibi"; LAYERS=30 ;;
+        21) NAME="Exp_21_TA_PE_24L"; ATTN="ta_pe"; LAYERS=24 ;;
+        22) NAME="Exp_22_TA_PE_28L"; ATTN="ta_pe"; LAYERS=28 ;;
+        23) NAME="Exp_23_TA_PE_30L"; ATTN="ta_pe"; LAYERS=30 ;;
+        24) NAME="Exp_24_GTA_PE_24L"; ATTN="gta_pe"; LAYERS=24 ;;
+        25) NAME="Exp_25_GTA_PE_28L"; ATTN="gta_pe"; LAYERS=28 ;;
+        26) NAME="Exp_26_GTA_PE_30L"; ATTN="gta_pe"; LAYERS=30 ;;
+        27) NAME="Exp_27_GQA_PE_24L"; ATTN="gqa_pe"; LAYERS=24 ;;
+        28) NAME="Exp_28_GQA_PE_28L"; ATTN="gqa_pe"; LAYERS=28 ;;
+        29) NAME="Exp_29_GQA_PE_30L"; ATTN="gqa_pe"; LAYERS=30 ;;
         *) echo "[!] Unknown EXP_ID '$EXP_ID'"; continue ;;
     esac
     
@@ -67,4 +83,4 @@ for EXP_ID in "${EXPS[@]}"; do
     sleep 30
 done
 
-echo "🎉 All training runs completed!"
+echo "🎉 All 29 training runs completed!"
